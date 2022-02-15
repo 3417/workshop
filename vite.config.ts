@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { build, defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path';
 // https://vitejs.dev/config/
@@ -23,5 +23,8 @@ export default defineConfig({
         additionalData: `@import "./src/assets/style/common.scss";`
       }
     }
+  },
+  build:{
+    outDir:'docs'
   }
 })
