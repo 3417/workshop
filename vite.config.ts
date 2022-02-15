@@ -4,6 +4,7 @@ import { resolve } from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  base:'/workshop',
   server: {
     host: '0.0.0.0',
     port: 9527,
