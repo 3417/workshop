@@ -37,7 +37,6 @@ import {
 } from "vue";
 import defaultImgs from "@as/imgs/default.jpg";
 // import { useRouter, useRoute } from "vue-router";
-
 const bgImg = ref(defaultImgs);
 const vhitokoto = ref("");
 const vfrom = ref("");
@@ -81,6 +80,16 @@ const getSpeech = () => {
 
 // 点击事件
 const handleItem = (ik: Number) => {
+  if(ik===0){
+    window.electron.send('maxBox')
+  }else if(ik===1){
+    window.electron.send('minBox')
+  }else if(ik===2){
+    getBackImg();
+    getSpeech();
+  }else if(ik===3){
+    window.electron.send('close')
+  }
 };
 onMounted(() => {
   getBackImg();

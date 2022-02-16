@@ -11,3 +11,8 @@ declare module '*.vue' {
 interface ImportMetaEnv{ 
   VITE_APP_BASE_API:string
 }
+
+
+interface Window{
+  electron:any
+}

@@ -2,7 +2,7 @@
   "name": "demo",
   "private": true,
   "version": "0.0.0",
-  "main": "main.js",
+  "main": "main.ts",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
