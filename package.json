@@ -2,10 +2,13 @@
   "name": "demo",
   "private": true,
   "version": "0.0.0",
+  "main": "main.js",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron": "wait-on tcp:9527 && electron .",
+    "e:serve":"concurrently -k \"yarn dev\" \"yarn electron\""
   },
   "dependencies": {
     "esbuild-windows-64": "^0.14.21",
@@ -16,8 +19,11 @@
   "devDependencies": {
     "@types/node": "^17.0.18",
     "@vitejs/plugin-vue": "^2.2.0",
+    "concurrently": "^7.0.0",
+    "electron": "^17.0.1",
     "typescript": "^4.5.4",
     "vite": "^2.8.0",
-    "vue-tsc": "^0.29.8"
+    "vue-tsc": "^0.29.8",
+    "wait-on": "^6.0.1"
   }
 }

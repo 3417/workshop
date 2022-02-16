@@ -4,11 +4,12 @@ import { resolve } from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  base:'/',
+  base:'./',  // 
+  // base:resolve(__dirname,'./dist/'),  // 
   server: {
     host: '0.0.0.0',
     port: 9527,
-    open: true
+    open: false
   },
   resolve: {
     extensions: ['.js', '.vue', '.json', '.ts', '.tsx'],
@@ -26,6 +27,6 @@ export default defineConfig({
     }
   },
   build:{
-    outDir:'docs'
+    outDir:'dist'
   }
 })

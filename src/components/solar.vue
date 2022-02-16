@@ -76,6 +76,7 @@ onBeforeUnmount(() => {
 
 
 <style lang="scss" scoped>
+@charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
 .solar {
   width: 100vw;
@@ -92,7 +93,7 @@ onBeforeUnmount(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   min-width: 240px;
-  color:#444;
+  color:#000;
   font-weight: bold;
   letter-spacing: 2px;
   transition: top .2s ease-in-out;
