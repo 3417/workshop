@@ -1,15 +1,7 @@
 <template>
-  <div
-    class="solar"
-    :style="{
-      background: `url(${bgImg}) no-repeat`,
-      backgroundSize: '100% 100%',
-    }"
-  ></div>
-
   <div class="solar_form">
     <div class="solar_hit">
-      <p>{{ vhitokoto }}</p>
+      <p class="solar_koto">{{ vhitokoto }}</p>
       <p class="solar_ple">
         <span>{{ vfrom ? vfrom : "未知" }}</span>
         <span>——</span>
@@ -17,11 +9,19 @@
       </p>
     </div>
   </div>
+  <div
+    class="solar"
+    :style="{
+      background: `url(${bgImg}) no-repeat`,
+      backgroundSize: '100% 100%',
+    }"
+  ></div>
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, onBeforeUnmount, defineComponent } from "vue";
+import defaultImgs from '@as/imgs/default.jpg';
 // import { useRouter, useRoute } from "vue-router";
-const bgImg = ref("");
+const bgImg = ref(defaultImgs);
 const vhitokoto = ref("");
 const vfrom = ref("");
 const vfrom_who = ref("");
@@ -34,7 +34,11 @@ const getBackImg = () => {
   fetch("https://picsum.photos/1920/1080?random")
     .then((response) => {
       const { url } = response;
-      bgImg.value = url;
+      let img = new Image();
+      img.src = url;
+      img.onload = function(){
+        bgImg.value = img.src;
+      }
     })
     .then((data) => {
       console.log(data);
@@ -72,9 +76,11 @@ onBeforeUnmount(() => {
 
 
 <style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
 .solar {
   width: 100vw;
   height: 100vh;
+  transition: background-image,filter .5s linear;  //背景图动画效果
 }
 .solar_form {
   position: absolute;
@@ -89,6 +95,20 @@ onBeforeUnmount(() => {
   color:#444;
   font-weight: bold;
   letter-spacing: 2px;
+  transition: top .2s ease-in-out;
+  z-index:999;
+  font-family: 'Ma Shan Zheng', cursive;
+  &:hover{
+    top:48%;
+    box-shadow: -3px 8px 18px rgba(0, 0, 0, 0.3);
+  }
+}
+.solar_form:hover+.solar{
+  filter:blur(10px);
+}
+.solar_koto{
+  margin-bottom: 5px;
+  font-size:20px;
 }
 .solar_ple{
     text-align: right;
