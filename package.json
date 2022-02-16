@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "app",
   "private": true,
   "version": "0.0.0",
   "main": "main.ts",
@@ -8,7 +8,8 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "electron": "wait-on tcp:9527 && electron .",
-    "e:serve":"concurrently -k \"yarn dev\" \"yarn electron\""
+    "e:serve":"concurrently -k \"yarn dev\" \"yarn electron\"",
+    "e:build":"vite build && electron-builder"
   },
   "dependencies": {
     "esbuild-windows-64": "^0.14.21",
@@ -25,5 +26,25 @@
     "vite": "^2.8.0",
     "vue-tsc": "^0.29.8",
     "wait-on": "^6.0.1"
+  },
+  "build": {
+    "appId": "com.3417.github.io",
+    "asar":true,
+    "productName": "saver",
+    "copyright": "Copyright © 2021 Jone",
+    "win": {
+      "target": ["nsis","zip"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true
+    },
+    "files": [
+      "dist/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "ele-app"
+    }
   }
 }

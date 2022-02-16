@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const NODE_ENV = 'development'  //TODO:VITE无法获取到process.env
+const NODE_ENV = 'developments'  //TODO:VITE无法获取到process.env
 function createWindow() {
     // 创建浏览器窗口
     const mainWindow = new BrowserWindow({
@@ -18,14 +18,13 @@ function createWindow() {
     // mainWindow.webContents.openDevTools()
     // 窗口最小化
     ipcMain.on('window-min', function () {
-        alert(222)
         mainWindow.minimize();
     })
 
     // 窗口最大化
     ipcMain.on('window-max', function () {
         if (mainWindow.isMaximized()) {
-            mainWindow.restore();
+            mainWindow.unmaximize();
         } else {
             mainWindow.maximize();
         }
