@@ -16,15 +16,33 @@
       backgroundSize: '100% 100%',
     }"
   ></div>
+  <div class="tool_menu">
+    <div
+      class="menu_item"
+      v-for="(iv, ik) in vmenu"
+      :key="ik"
+      @click.stop="handleItem(ik)"
+    >
+      {{ iv }}
+    </div>
+  </div>
+  <div class="drag"></div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, onBeforeUnmount, defineComponent } from "vue";
-import defaultImgs from '@as/imgs/default.jpg';
+import {
+  onMounted,
+  ref,
+  onBeforeUnmount,
+  defineComponent,
+} from "vue";
+import defaultImgs from "@as/imgs/default.jpg";
 // import { useRouter, useRoute } from "vue-router";
+
 const bgImg = ref(defaultImgs);
 const vhitokoto = ref("");
 const vfrom = ref("");
 const vfrom_who = ref("");
+const vmenu = ref(["最大化", "最小化", "随机一下", "关闭"]);
 // const route = useRouter();
 const timer = ref(0);
 defineComponent({
@@ -36,9 +54,9 @@ const getBackImg = () => {
       const { url } = response;
       let img = new Image();
       img.src = url;
-      img.onload = function(){
+      img.onload = function () {
         bgImg.value = img.src;
-      }
+      };
     })
     .then((data) => {
       console.log(data);
@@ -61,6 +79,9 @@ const getSpeech = () => {
     .catch(console.error);
 };
 
+// 点击事件
+const handleItem = (ik: Number) => {
+};
 onMounted(() => {
   getBackImg();
   getSpeech();
@@ -77,11 +98,11 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap");
 .solar {
   width: 100vw;
   height: 100vh;
-  transition: background-image,filter .5s linear;  //背景图动画效果
+  transition: background-image, filter 0.5s linear; //背景图动画效果
 }
 .solar_form {
   position: absolute;
@@ -93,25 +114,277 @@ onBeforeUnmount(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   min-width: 240px;
-  color:#000;
+  color: #000;
   font-weight: bold;
   letter-spacing: 2px;
-  transition: top .2s ease-in-out;
-  z-index:999;
-  font-family: 'Ma Shan Zheng', cursive;
-  &:hover{
-    top:48%;
+  transition: top 0.2s ease-in-out;
+  z-index: 999;
+  font-family: "Ma Shan Zheng", cursive;
+  &:hover {
+    top: 48%;
     box-shadow: -3px 8px 18px rgba(0, 0, 0, 0.3);
   }
 }
-.solar_form:hover+.solar{
-  filter:blur(10px);
+
+.tool_menu {
+  position: absolute;
+  right: -92px;
+  top: 20%;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  padding: 12px 10px;
+  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in;
+  z-index: 998;
+  user-select: none;
+  &::before {
+    position: absolute;
+    z-index: -1;
+    content: "";
+    top: calc(50% - 18px);
+    left: -26px;
+    background: url("@as/imgs/expand.png") no-repeat;
+    background-size: 100% auto;
+    width: 26px;
+    height: 26px;
+  }
+  &:hover {
+    right: 0;
+  }
+  .menu_item {
+    color: #333;
+    font: 500 18px "Ma Shan Zheng";
+    margin-bottom: 6px;
+    cursor: pointer;
+    &:hover {
+      color: #f52828;
+    }
+  }
 }
-.solar_koto{
+
+.drag {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: url("@as/imgs/drag.png") no-repeat;
+  background-size: 100% auto;
+  width: 36px;
+  height: 36px;
+  -webkit-app-region: drag;
+  animation: shake 100ms ease-in-out infinite;
+}
+.solar_form:hover + .solar {
+  filter: blur(10px);
+}
+.solar_koto {
   margin-bottom: 5px;
-  font-size:20px;
+  font-size: 20px;
 }
-.solar_ple{
-    text-align: right;
+.solar_ple {
+  text-align: right;
+}
+
+@keyframes shake {
+  2% {
+    transform: translate(1.5px, -1.5px) rotate(-0.5deg);
+  }
+
+  4% {
+    transform: translate(-1.5px, -0.5px) rotate(1.5deg);
+  }
+
+  6% {
+    transform: translate(1.5px, 2.5px) rotate(-0.5deg);
+  }
+
+  8% {
+    transform: translate(2.5px, 0.5px) rotate(-0.5deg);
+  }
+
+  10% {
+    transform: translate(2.5px, -0.5px) rotate(-0.5deg);
+  }
+
+  12% {
+    transform: translate(-0.5px, 1.5px) rotate(1.5deg);
+  }
+
+  14% {
+    transform: translate(2.5px, -0.5px) rotate(1.5deg);
+  }
+
+  16% {
+    transform: translate(0.5px, -1.5px) rotate(0.5deg);
+  }
+
+  18% {
+    transform: translate(2.5px, 2.5px) rotate(-0.5deg);
+  }
+
+  20% {
+    transform: translate(1.5px, -0.5px) rotate(1.5deg);
+  }
+
+  22% {
+    transform: translate(-0.5px, 1.5px) rotate(0.5deg);
+  }
+
+  24% {
+    transform: translate(-1.5px, 1.5px) rotate(0.5deg);
+  }
+
+  26% {
+    transform: translate(2.5px, 0.5px) rotate(1.5deg);
+  }
+
+  28% {
+    transform: translate(-0.5px, -0.5px) rotate(0.5deg);
+  }
+
+  30% {
+    transform: translate(0.5px, -0.5px) rotate(0.5deg);
+  }
+
+  32% {
+    transform: translate(1.5px, -0.5px) rotate(1.5deg);
+  }
+
+  34% {
+    transform: translate(1.5px, 0.5px) rotate(-0.5deg);
+  }
+
+  36% {
+    transform: translate(0.5px, 2.5px) rotate(0.5deg);
+  }
+
+  38% {
+    transform: translate(-1.5px, -0.5px) rotate(0.5deg);
+  }
+
+  40% {
+    transform: translate(0.5px, -0.5px) rotate(0.5deg);
+  }
+
+  42% {
+    transform: translate(0.5px, -0.5px) rotate(1.5deg);
+  }
+
+  44% {
+    transform: translate(-1.5px, 0.5px) rotate(1.5deg);
+  }
+
+  46% {
+    transform: translate(-1.5px, -0.5px) rotate(-0.5deg);
+  }
+
+  48% {
+    transform: translate(-1.5px, -0.5px) rotate(-0.5deg);
+  }
+
+  50% {
+    transform: translate(-0.5px, -0.5px) rotate(0.5deg);
+  }
+
+  52% {
+    transform: translate(-1.5px, 0.5px) rotate(1.5deg);
+  }
+
+  54% {
+    transform: translate(2.5px, 0.5px) rotate(-0.5deg);
+  }
+
+  56% {
+    transform: translate(1.5px, 2.5px) rotate(1.5deg);
+  }
+
+  58% {
+    transform: translate(0.5px, 1.5px) rotate(1.5deg);
+  }
+
+  60% {
+    transform: translate(-1.5px, -1.5px) rotate(1.5deg);
+  }
+
+  62% {
+    transform: translate(0.5px, 1.5px) rotate(-0.5deg);
+  }
+
+  64% {
+    transform: translate(1.5px, 2.5px) rotate(1.5deg);
+  }
+
+  66% {
+    transform: translate(1.5px, -0.5px) rotate(1.5deg);
+  }
+
+  68% {
+    transform: translate(-1.5px, 1.5px) rotate(0.5deg);
+  }
+
+  70% {
+    transform: translate(0.5px, 0.5px) rotate(-0.5deg);
+  }
+
+  72% {
+    transform: translate(-0.5px, -0.5px) rotate(0.5deg);
+  }
+
+  74% {
+    transform: translate(0.5px, -1.5px) rotate(0.5deg);
+  }
+
+  76% {
+    transform: translate(-0.5px, 1.5px) rotate(0.5deg);
+  }
+
+  78% {
+    transform: translate(1.5px, -1.5px) rotate(-0.5deg);
+  }
+
+  80% {
+    transform: translate(-1.5px, -0.5px) rotate(0.5deg);
+  }
+
+  82% {
+    transform: translate(0.5px, -0.5px) rotate(0.5deg);
+  }
+
+  84% {
+    transform: translate(2.5px, 2.5px) rotate(1.5deg);
+  }
+
+  86% {
+    transform: translate(2.5px, -0.5px) rotate(1.5deg);
+  }
+
+  88% {
+    transform: translate(0.5px, 0.5px) rotate(-0.5deg);
+  }
+
+  90% {
+    transform: translate(-0.5px, -1.5px) rotate(-0.5deg);
+  }
+
+  92% {
+    transform: translate(2.5px, 1.5px) rotate(-0.5deg);
+  }
+
+  94% {
+    transform: translate(2.5px, -1.5px) rotate(-0.5deg);
+  }
+
+  96% {
+    transform: translate(2.5px, 2.5px) rotate(0.5deg);
+  }
+
+  98% {
+    transform: translate(2.5px, -0.5px) rotate(0.5deg);
+  }
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
 }
 </style>

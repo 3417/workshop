@@ -1,18 +1,34 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow,ipcMain } = require('electron');
 const path = require('path');
-
+const NODE_ENV = 'development'  //TODO:VITE无法获取到process.env
 function createWindow() {
     // 创建浏览器窗口
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
+        frame:false,
+        transparent:true,
+        maximizable:false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
     })
-    mainWindow.loadURL("http://localhost:9527")
-    mainWindow.webContents.openDevTools()
+    mainWindow.loadURL(NODE_ENV === 'development' ? "http://localhost:9527" :`file://${path.join(__dirname, './dist/index.html')}`)
+    // mainWindow.webContents.openDevTools()
 }
+// 窗口最小化
+ipcMain.on('window-min',function(){
+    mainWindow.minimize();
+})
+
+// 窗口最大化
+ipcMain.on('window-max',function(){
+    if (mainWindow.isMaximized()) {
+        mainWindow.restore();
+    } else {
+        mainWindow.maximize();
+    }
+})
 
 app.whenReady().then(() => {
     createWindow()
