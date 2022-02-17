@@ -16,17 +16,9 @@
       backgroundSize: '100% 100%',
     }"
   ></div>
-  <div class="tool_menu">
-    <div
-      class="menu_item"
-      v-for="(iv, ik) in vmenu"
-      :key="ik"
-      @click.stop="handleItem(ik)"
-    >
-      {{ iv }}
-    </div>
+  <div class="zoom-flex">
+    <div :class="['zoom',iv.className]" :title="iv.text" v-for="(iv, ik) in vmenuIcon" :key="ik" @click.stop="handleItem(ik)"></div>
   </div>
-  <div class="drag"></div>
 </template>
 <script lang="ts" setup>
 import {
@@ -41,7 +33,7 @@ const bgImg = ref(defaultImgs);
 const vhitokoto = ref("");
 const vfrom = ref("");
 const vfrom_who = ref("");
-const vmenu = ref(["最大化", "最小化", "随机一下", "关闭"]);
+const vmenuIcon = ref([{className:'drag',text:'按住移动'},{className:'max',text:'最大化'},{className:'min',text:'最小化'},{className:'shuffle',text:'随机一下'},{className:'close',text:'关闭'}]);
 // const route = useRouter();
 const timer = ref(0);
 defineComponent({
@@ -58,7 +50,7 @@ const getBackImg = () => {
       };
     })
     .then((data) => {
-      console.log(data);
+      // console.log(data);
     })
     .catch(function (e) {
       console.log("Oops, error");
@@ -80,14 +72,14 @@ const getSpeech = () => {
 
 // 点击事件
 const handleItem = (ik: Number) => {
-  if(ik===0){
+  if(ik===1){
     window.electron.send('maxBox')
-  }else if(ik===1){
-    window.electron.send('minBox')
   }else if(ik===2){
+    window.electron.send('minBox')
+  }else if(ik===3){
     getBackImg();
     getSpeech();
-  }else if(ik===3){
+  }else{
     window.electron.send('close')
   }
 };
@@ -134,55 +126,41 @@ onBeforeUnmount(() => {
     box-shadow: -3px 8px 18px rgba(0, 0, 0, 0.3);
   }
 }
-
-.tool_menu {
-  position: absolute;
-  right: -92px;
-  top: 20%;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 4px;
-  padding: 12px 10px;
-  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease-in;
-  z-index: 998;
-  user-select: none;
-  &::before {
-    position: absolute;
-    z-index: -1;
-    content: "";
-    top: calc(50% - 18px);
-    left: -26px;
-    background: url("@as/imgs/expand.png") no-repeat;
-    background-size: 100% auto;
-    width: 26px;
-    height: 26px;
-  }
-  &:hover {
-    right: 0;
-  }
-  .menu_item {
-    color: #333;
-    font: 500 18px "Ma Shan Zheng";
-    margin-bottom: 6px;
-    cursor: pointer;
-    &:hover {
-      color: #f52828;
-    }
-  }
+.max{
+  background: url('@as/imgs/max.png') no-repeat;
+}
+.min{
+  background: url('@as/imgs/min.png') no-repeat;
+}
+.shuffle{
+  background: url('@as/imgs/shuffle.png') no-repeat;
+}
+.close{
+  background: url('@as/imgs/close.png') no-repeat;
+}
+.drag {
+  background: url("@as/imgs/drag.png") no-repeat;
+  -webkit-app-region: drag;
+  animation: shake 12s ease-in-out infinite;
 }
 
-.drag {
-  position: absolute;
-  top: 0;
+.zoom-flex{
+  display: flex;
+  justify-content: space-around;
+  position:absolute;
+  top: 6px;
   left: 50%;
   transform: translateX(-50%);
-  background: url("@as/imgs/drag.png") no-repeat;
-  background-size: 100% auto;
-  width: 36px;
-  height: 36px;
-  -webkit-app-region: drag;
-  animation: shake 100ms ease-in-out infinite;
 }
+.zoom{
+  width: 26px;
+  height: 26px;
+  background-size:100% auto;
+  &:not(:last-child){
+    margin-right:20px;
+  }
+}
+
 .solar_form:hover + .solar {
   filter: blur(10px);
 }
