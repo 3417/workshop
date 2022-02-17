@@ -1,6 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const NODE_ENV = 'developments'  //TODO:VITE无法获取到process.env
 function createWindow() {
     // 创建浏览器窗口
     const mainWindow = new BrowserWindow({
@@ -10,11 +9,11 @@ function createWindow() {
         transparent: true,
         maximizable: false,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.ts'),
+            preload: path.join(__dirname, './preload.ts'),
             nodeIntegration: true,
         }
     })
-    mainWindow.loadURL(NODE_ENV === 'development' ? "http://localhost:9527" : `file://${path.join(__dirname, './dist/index.html')}`)
+    mainWindow.loadURL(false ? "http://localhost:9527" : `file://${path.join(__dirname, '../dist/index.html')}`)
     // mainWindow.webContents.openDevTools()
     // 窗口最小化
     ipcMain.on('window-min', function () {

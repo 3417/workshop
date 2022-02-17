@@ -2,14 +2,14 @@
   "name": "app",
   "private": true,
   "version": "0.0.0",
-  "main": "main.ts",
+  "main": "electron/main.ts",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "electron": "wait-on tcp:9527 && electron .",
-    "e:serve":"concurrently -k \"yarn dev\" \"yarn electron\"",
-    "e:build":"vite build && electron-builder"
+    "e:serve": "concurrently -k \"yarn dev\" \"yarn electron\"",
+    "e:build": "vite build && electron-builder"
   },
   "dependencies": {
     "esbuild-windows-64": "^0.14.21",
@@ -22,6 +22,7 @@
     "@vitejs/plugin-vue": "^2.2.0",
     "concurrently": "^7.0.0",
     "electron": "^17.0.1",
+    "electron-builder": "^22.14.13",
     "typescript": "^4.5.4",
     "vite": "^2.8.0",
     "vue-tsc": "^0.29.8",
@@ -29,22 +30,26 @@
   },
   "build": {
     "appId": "com.3417.github.io",
-    "asar":true,
-    "productName": "saver",
+    "productName": "saves",
     "copyright": "Copyright © 2021 Jone",
     "win": {
-      "target": ["nsis","zip"]
+      "target": [
+        "nsis",
+        "zip"
+      ]
     },
     "nsis": {
       "oneClick": false,
-      "allowElevation": true
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
     },
-    "files": [
-      "dist/**/*"
+    "files":[
+      "dist/**/*",
+      "electron/**/*"
     ],
+    "extends": null,
     "directories": {
-      "buildResources": "assets",
-      "output": "ele-app"
+      "output": "e-app"
     }
   }
 }
