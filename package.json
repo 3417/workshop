@@ -30,13 +30,14 @@
   },
   "build": {
     "appId": "com.3417.github.io",
-    "productName": "saves",
+    "productName": "relax",
     "copyright": "Copyright © 2021 Jone",
     "win": {
       "target": [
         "nsis",
         "zip"
-      ]
+      ],
+      "icon":"/public/icon.png"
     },
     "nsis": {
       "oneClick": false,
