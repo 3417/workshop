@@ -1,9 +1,10 @@
 const { app, BrowserWindow, ipcMain,Menu,Tray } = require('electron');
 const path = require('path');
+let mainWindow = null;
 let tray = null;
 function createWindow() {
     // 创建浏览器窗口
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         frame: false,
@@ -31,8 +32,6 @@ function createWindow() {
     ipcMain.on('window-close', function () {
         mainWindow.close();
     })
-
-
     // 新建托盘
     tray = new Tray(path.join(__dirname,'../public/icon.ico'));
     tray.setToolTip('Electron Relax');
