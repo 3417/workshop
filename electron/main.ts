@@ -1,12 +1,12 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain,Menu,Tray } = require('electron');
 const path = require('path');
+let tray = null;
 function createWindow() {
     // 创建浏览器窗口
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         frame: false,
-        transparent: true,
         maximizable: false,
         webPreferences: {
             preload: path.join(__dirname, './preload.ts'),
@@ -31,6 +31,26 @@ function createWindow() {
     ipcMain.on('window-close', function () {
         mainWindow.close();
     })
+
+
+    // 新建托盘
+    tray = new Tray(path.join(__dirname,'../public/icon.ico'));
+    tray.setToolTip('Electron Relax');
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label:"显示",
+            click:()=>{mainWindow.show()}
+        },
+        {
+            label:"退出",
+            click:()=>{mainWindow.destroy()}
+        }
+    ])
+    tray.setContextMenu(contextMenu);
+    tray.on('double-click',()=>{
+        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+        mainWindow.isVisible() ? mainWindow.setSkipTaskbar(false) : mainWindow.setSkipTaskbar(true);
+    })
 }
 
 app.whenReady().then(() => {
@@ -46,3 +66,8 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') app.quit()
 })
+// 防止多开
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+  app.quit()
+}

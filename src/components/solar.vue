@@ -16,9 +16,11 @@
       backgroundSize: '100% 100%',
     }"
   ></div>
+  <div class="zoom-fing"></div>
   <div class="zoom-flex">
     <div :class="['zoom',iv.className]" :title="iv.text" v-for="(iv, ik) in vmenuIcon" :key="ik" @click.stop="handleItem(ik)"></div>
   </div>
+  <div class="zoom-move"></div> 
 </template>
 <script lang="ts" setup>
 import {
@@ -33,7 +35,7 @@ const bgImg = ref(defaultImgs);
 const vhitokoto = ref("");
 const vfrom = ref("");
 const vfrom_who = ref("");
-const vmenuIcon = ref([{className:'drag',text:'按住移动'},{className:'max',text:'最大化'},{className:'min',text:'最小化'},{className:'shuffle',text:'随机一下'},{className:'close',text:'关闭'}]);
+const vmenuIcon = ref([{className:'',text:''},{className:'max',text:'最大化'},{className:'min',text:'最小化'},{className:'shuffle',text:'随机一下'},{className:'close',text:'关闭'}]);
 // const route = useRouter();
 const timer = ref(0);
 defineComponent({
@@ -146,18 +148,49 @@ onBeforeUnmount(() => {
 
 .zoom-flex{
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   position:absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  user-select: none;
+  transform: translate(38px,-50%);
+  right:6px;
+  transition: transform .2s ease-in;
+}
+
+.zoom-fing{
+  background: url('@as/imgs/fig.png') no-repeat;
+    background-size:100% auto;
+    width:60px;
+    height: 40px;
+    position:absolute;
+    right:0;
+    top:50%;
+    transform: translateY(-50%);
+    opacity: .23;
+    transition: right .2s ease-in-out;
+    &:hover{
+      right:36px;
+    }
+    &:hover+.zoom-flex{
+      transform: translate(0,-50%);
+    }
+}
+
+.zoom-move{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:35px;
+   -webkit-app-region: drag;
 }
 .zoom{
   width: 26px;
   height: 26px;
   background-size:100% auto;
   &:not(:last-child){
-    margin-right:20px;
+    margin-bottom:20px;
   }
 }
 
