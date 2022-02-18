@@ -16,9 +16,11 @@
       backgroundSize: '100% 100%',
     }"
   ></div>
-  <div class="zoom-fing"></div>
-  <div class="zoom-flex">
-    <div :class="['zoom',iv.className]" :title="iv.text" v-for="(iv, ik) in vmenuIcon" :key="ik" @click.stop="handleItem(ik)"></div>
+  <div class="zoom-container">
+    <div class="zoom-fing"></div>
+    <div class="zoom-flex">
+      <div :class="['zoom',iv.className]" :title="iv.text" v-for="(iv, ik) in vmenuIcon" :key="ik" @click.stop="handleItem(ik)"></div>
+    </div>
   </div>
   <div class="zoom-move"></div> 
 </template>
@@ -157,6 +159,14 @@ onBeforeUnmount(() => {
   right:6px;
   transition: transform .2s ease-in;
 }
+.zoom-container:hover{
+  .zoom-fing{
+    right: 30px;
+  }
+  .zoom-flex{
+      transform: translate(0,-50%);
+  }
+}
 
 .zoom-fing{
   background: url('@as/imgs/fig.png') no-repeat;
@@ -169,12 +179,6 @@ onBeforeUnmount(() => {
     transform: translateY(-50%);
     opacity: .23;
     transition: right .2s ease-in-out;
-    &:hover{
-      right:36px;
-    }
-    &:hover+.zoom-flex{
-      transform: translate(0,-50%);
-    }
 }
 
 .zoom-move{
