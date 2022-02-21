@@ -1,9 +1,9 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray,dialog } = require('electron');
 const path = require('path');
 let mainWindow = null;
 let tray = null;
-console.log(process.env.NODE_ENV)
 const NODE_DEV = process.env.NODE_ENV ? process.env.NODE_ENV.trim():'';
+console.log(NODE_DEV)
 function createWindow() {
     // 创建浏览器窗口
     mainWindow = new BrowserWindow({
@@ -34,8 +34,12 @@ function createWindow() {
     ipcMain.on('window-close', function () {
         mainWindow.close();
     })
+    // FIXME:下载图片
+    ipcMain.on('window-download',function(arg){
+        console.log(23333,arg);
+    })
     // 新建托盘
-    tray = new Tray(path.join(__dirname, '/icon.ico'));
+    tray = new Tray(path.join(__dirname, '../public/icon.ico'));
     tray.setToolTip('Electron Relax');
     const contextMenu = Menu.buildFromTemplate([
         {

@@ -12,13 +12,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
 const {contextBridge,ipcRenderer} = require('electron');
 contextBridge.exposeInMainWorld('electron',{
-  send:(name)=>{
+  send:(name,url)=>{
     if(name === 'maxBox'){
       ipcRenderer.send("window-max")
     }else if(name ==='minBox'){
       ipcRenderer.send("window-min")
     }else if(name ==='close'){
       ipcRenderer.send("window-close")
+    }else if(name === 'downloadImg'){
+      ipcRenderer.send("window-download",url)
     }
   }  
 })

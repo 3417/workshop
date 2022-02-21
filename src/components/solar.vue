@@ -22,7 +22,7 @@
       :title="iv.text"
       v-for="(iv, ik) in vmenu"
       :key="ik"
-      @click.stop="handleItem(ik,$event)"
+      @click.stop="handleItem(iv.id,$event)"
     >
       {{ iv.text }}
     </div>
@@ -38,10 +38,11 @@ const vhitokoto = ref("");
 const vfrom = ref("");
 const vfrom_who = ref("");
 const vmenu = ref([
-  { text: "最大化" },
-  { text: "最小化" },
-  { text: "随机一下" },
-  { text: "关闭" },
+  { text: "全屏化",id:1 },
+  { text: "最小化",id:2 },
+  { text: "随机壁纸",id:3 },
+  // { text: "下载当前壁纸",id:4},
+  { text: "关闭应用",id:5 },
 ]);
 // const route = useRouter();
 const timer = ref(0);
@@ -81,14 +82,16 @@ const getSpeech = () => {
 
 // 点击事件
 const handleItem = (ik: Number,$event:any) => {
-  if (ik === 0) {
+  if (ik === 1) {
     window.electron.send("maxBox");
-  } else if (ik === 1) {
-    window.electron.send("minBox");
   } else if (ik === 2) {
+    window.electron.send("minBox");
+  } else if (ik === 3) {
     getBackImg();
     getSpeech();
-  } else {
+  }else if(ik === 4){
+    window.electron.send("downloadImg",bgImg.value)
+  }else  {
     window.electron.send("close");
   }
   const $events = $event.currentTarget.parentElement;
@@ -119,7 +122,6 @@ const vContextmenu = {
       e.preventDefault();
       el.style.opacity = 1; //右键显示
       el.style.zIndex = 1000;
-      console.log(offsetX,dWidth)
       if(dWidth - offsetX < boxWidth){el.style.left = (offsetX - boxWidth)+'px'}
       else {el.style.left = clientX + "px";}
       if(dHeight - offsetY < boxHeight){el.style.top = (offsetY - boxHeight)+'px'}
