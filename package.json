@@ -7,9 +7,9 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "electron": "wait-on tcp:9527 && electron .",
+    "electron": "set NODE_ENV=dev && wait-on tcp:9527 && electron .",
     "e:serve": "concurrently -k \"yarn dev\" \"yarn electron\"",
-    "e:build": "vite build && electron-builder"
+    "e:build": "set NODE_ENV=pro && vite build && electron-builder"
   },
   "dependencies": {
     "esbuild-windows-64": "^0.14.21",

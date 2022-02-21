@@ -1,7 +1,9 @@
-const { app, BrowserWindow, ipcMain,Menu,Tray } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
 const path = require('path');
 let mainWindow = null;
 let tray = null;
+console.log(process.env.NODE_ENV)
+const NODE_DEV = process.env.NODE_ENV ? process.env.NODE_ENV.trim():'';
 function createWindow() {
     // 创建浏览器窗口
     mainWindow = new BrowserWindow({
@@ -14,7 +16,7 @@ function createWindow() {
             nodeIntegration: true,
         }
     })
-    mainWindow.loadURL(false ? "http://localhost:9527" : `file://${path.join(__dirname, '../dist/index.html')}`)
+    mainWindow.loadURL(NODE_DEV === 'dev' ? "http://localhost:9527" : `file://${path.join(__dirname, '../dist/index.html')}`)
     // mainWindow.webContents.openDevTools()
     // 窗口最小化
     ipcMain.on('window-min', function () {
@@ -33,22 +35,32 @@ function createWindow() {
         mainWindow.close();
     })
     // 新建托盘
-    tray = new Tray(path.join(__dirname,'../public/icon.ico'));
+    tray = new Tray(path.join(__dirname, '/icon.ico'));
     tray.setToolTip('Electron Relax');
     const contextMenu = Menu.buildFromTemplate([
         {
-            label:"显示",
-            click:()=>{mainWindow.show()}
+            label: "显示",
+            click: () => { mainWindow.show() }
         },
         {
-            label:"退出",
-            click:()=>{mainWindow.destroy()}
+            label: "退出",
+            click: () => { mainWindow.destroy() }
         }
     ])
     tray.setContextMenu(contextMenu);
-    tray.on('double-click',()=>{
+    tray.on('double-click', () => {
         mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
         mainWindow.isVisible() ? mainWindow.setSkipTaskbar(false) : mainWindow.setSkipTaskbar(true);
+    })
+    // 屏蔽拖拽的右键事件
+    mainWindow.hookWindowMessage(278, function (e) {
+        mainWindow.blur();
+        mainWindow.focus();
+        mainWindow.setEnabled(false);
+        setTimeout(() => {
+            mainWindow.setEnabled(true);
+        }, 100);
+        return true;
     })
 }
 
@@ -68,5 +80,5 @@ app.on('window-all-closed', function () {
 // 防止多开
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
-  app.quit()
+    app.quit()
 }

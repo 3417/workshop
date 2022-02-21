@@ -106,18 +106,24 @@ timer.value = window.setInterval(() => {
 onBeforeUnmount(() => {
   clearInterval(timer.value);
 });
-// TODO:指令实现右键菜单
 const vContextmenu = {
   created() {},
   beforeMount() {},
   mounted(el: any, binding: any, vnode: any) {
     function showMenu(e: any) {
-      const { clientX, clientY, screenX, screenY } = e;
+      const { clientX, clientY, offsetX, offsetY } = e;
+      const dWidth = document.body.clientWidth;
+      const dHeight = document.body.clientHeight;
+      const boxWidth = el.clientWidth;
+      const boxHeight = el.clientHeight;
       e.preventDefault();
       el.style.opacity = 1; //右键显示
       el.style.zIndex = 1000;
-      el.style.left = clientX + "px";
-      el.style.top = clientY + "px";
+      console.log(offsetX,dWidth)
+      if(dWidth - offsetX < boxWidth){el.style.left = (offsetX - boxWidth)+'px'}
+      else {el.style.left = clientX + "px";}
+      if(dHeight - offsetY < boxHeight){el.style.top = (offsetY - boxHeight)+'px'}
+      else {el.style.top = clientY + "px";}
     }
     function closeMenu(e: any) {
       el.style.opacity = 0;
@@ -190,7 +196,7 @@ const vContextmenu = {
   top: 0;
   left: 0;
   right: 0;
-  height: 35px;
+  height: 20px;
   -webkit-app-region: drag;
 }
 .zoom {
@@ -205,7 +211,8 @@ const vContextmenu = {
   background-color: rgb(255, 255, 255);
   font-family: "Ma Shan Zheng", cursive;
   &:hover {
-    color: #d81b1b;
+    color: #fefefe;
+    background-color:#7d89f0;
   }
 }
 .solar_koto {
