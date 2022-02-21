@@ -16,28 +16,33 @@
       backgroundSize: '100% 100%',
     }"
   ></div>
-  <div class="zoom-container">
-    <div class="zoom-fing"></div>
-    <div class="zoom-flex">
-      <div :class="['zoom',iv.className]" :title="iv.text" v-for="(iv, ik) in vmenuIcon" :key="ik" @click.stop="handleItem(ik)"></div>
+  <div class="zoom-flex" v-contextmenu="vmenu">
+    <div
+      class="zoom"
+      :title="iv.text"
+      v-for="(iv, ik) in vmenu"
+      :key="ik"
+      @click.stop="handleItem(ik,$event)"
+    >
+      {{ iv.text }}
     </div>
   </div>
-  <div class="zoom-move"></div> 
+  <div class="zoom-move"></div>
 </template>
 <script lang="ts" setup>
-import {
-  onMounted,
-  ref,
-  onBeforeUnmount,
-  defineComponent,
-} from "vue";
+import { onMounted, ref, onBeforeUnmount, defineComponent } from "vue";
 import defaultImgs from "@as/imgs/default.jpg";
 // import { useRouter, useRoute } from "vue-router";
 const bgImg = ref(defaultImgs);
 const vhitokoto = ref("");
 const vfrom = ref("");
 const vfrom_who = ref("");
-const vmenuIcon = ref([{className:'',text:''},{className:'max',text:'最大化'},{className:'min',text:'最小化'},{className:'shuffle',text:'随机一下'},{className:'close',text:'关闭'}]);
+const vmenu = ref([
+  { text: "最大化" },
+  { text: "最小化" },
+  { text: "随机一下" },
+  { text: "关闭" },
+]);
 // const route = useRouter();
 const timer = ref(0);
 defineComponent({
@@ -75,17 +80,20 @@ const getSpeech = () => {
 };
 
 // 点击事件
-const handleItem = (ik: Number) => {
-  if(ik===1){
-    window.electron.send('maxBox')
-  }else if(ik===2){
-    window.electron.send('minBox')
-  }else if(ik===3){
+const handleItem = (ik: Number,$event:any) => {
+  if (ik === 0) {
+    window.electron.send("maxBox");
+  } else if (ik === 1) {
+    window.electron.send("minBox");
+  } else if (ik === 2) {
     getBackImg();
     getSpeech();
-  }else{
-    window.electron.send('close')
+  } else {
+    window.electron.send("close");
   }
+  const $events = $event.currentTarget.parentElement;
+  $events.style.opacity = 0;
+  $events.style.zIndex = -1000;
 };
 onMounted(() => {
   getBackImg();
@@ -98,16 +106,42 @@ timer.value = window.setInterval(() => {
 onBeforeUnmount(() => {
   clearInterval(timer.value);
 });
+// TODO:指令实现右键菜单
+const vContextmenu = {
+  created() {},
+  beforeMount() {},
+  mounted(el: any, binding: any, vnode: any) {
+    function showMenu(e: any) {
+      const { clientX, clientY, screenX, screenY } = e;
+      e.preventDefault();
+      el.style.opacity = 1; //右键显示
+      el.style.zIndex = 1000;
+      el.style.left = clientX + "px";
+      el.style.top = clientY + "px";
+    }
+    function closeMenu(e: any) {
+      el.style.opacity = 0;
+      el.style.zIndex = -1000;
+    }
+    addEventListener("click", (e) => closeMenu(e));
+    document.addEventListener("contextmenu", showMenu);
+  },
+  beforeUnmount() {},
+  unmounted() {
+  },
+};
 </script>
 
 
 <style lang="scss" scoped>
-@charset "UTF-8";
+/*@charset "UTF-8";*/
 @import url("https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap");
 .solar {
   width: 100vw;
   height: 100vh;
-  transition: background-image, filter 0.5s linear; //背景图动画效果
+  // transition: background-image, filter 0.3s linear; //背景图动画效果
+  transition: background-image 0.3s, background-color 0.2s, filter 0.2s;
+  will-change: background-image;
 }
 .solar_form {
   position: absolute;
@@ -117,89 +151,62 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate3d(-50%, -50%, 0);
   min-width: 240px;
   color: #000;
   font-weight: bold;
   letter-spacing: 2px;
-  transition: top 0.2s ease-in-out;
+  transition: transform 0.12s linear;
   z-index: 999;
   font-family: "Ma Shan Zheng", cursive;
   &:hover {
-    top: 48%;
+    transform: translate3d(-50%, -58%, 0);
     box-shadow: -3px 8px 18px rgba(0, 0, 0, 0.3);
   }
 }
-.max{
-  background: url('@as/imgs/max.png') no-repeat;
+.solar_form:hover + .solar {
+  filter: blur(4px);
 }
-.min{
-  background: url('@as/imgs/min.png') no-repeat;
-}
-.shuffle{
-  background: url('@as/imgs/shuffle.png') no-repeat;
-}
-.close{
-  background: url('@as/imgs/close.png') no-repeat;
-}
-.drag {
-  background: url("@as/imgs/drag.png") no-repeat;
-  -webkit-app-region: drag;
-  animation: shake 12s ease-in-out infinite;
-}
-
-.zoom-flex{
+.zoom-flex {
+  padding: 7px 0px;
+  pointer-events: all;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  position:absolute;
-  top: 50%;
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  z-index: 1000;
+  left: 0;
+  top: 0;
   user-select: none;
-  transform: translate(38px,-50%);
-  right:6px;
-  transition: transform .2s ease-in;
-}
-.zoom-container:hover{
-  .zoom-fing{
-    right: 30px;
-  }
-  .zoom-flex{
-      transform: translate(0,-50%);
-  }
+  box-shadow: rgb(0 0 0 / 12%) 0px 4px 19px 0px;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: opacity 0.3s ease 0s;
+  opacity: 0;
 }
 
-.zoom-fing{
-  background: url('@as/imgs/fig.png') no-repeat;
-    background-size:100% auto;
-    width:60px;
-    height: 40px;
-    position:absolute;
-    right:0;
-    top:50%;
-    transform: translateY(-50%);
-    opacity: .23;
-    transition: right .2s ease-in-out;
+.zoom-move {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 35px;
+  -webkit-app-region: drag;
 }
-
-.zoom-move{
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:35px;
-   -webkit-app-region: drag;
-}
-.zoom{
-  width: 26px;
-  height: 26px;
-  background-size:100% auto;
-  &:not(:last-child){
-    margin-bottom:20px;
+.zoom {
+  margin: 1px 0px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 8px 20px;
+  color: rgb(51, 51, 51);
+  white-space: nowrap;
+  transition: none 0s ease 0s;
+  background-color: rgb(255, 255, 255);
+  font-family: "Ma Shan Zheng", cursive;
+  &:hover {
+    color: #d81b1b;
   }
-}
-
-.solar_form:hover + .solar {
-  filter: blur(10px);
 }
 .solar_koto {
   margin-bottom: 5px;
