@@ -41,7 +41,7 @@ const vmenu = ref([
   { text: "全屏化",id:1 },
   { text: "最小化",id:2 },
   { text: "随机壁纸",id:3 },
-  // { text: "下载当前壁纸",id:4},
+  { text: "下载当前壁纸",id:4},
   { text: "关闭应用",id:5 },
 ]);
 // const route = useRouter();

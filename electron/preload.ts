@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld('electron',{
     }else if(name ==='close'){
       ipcRenderer.send("window-close")
     }else if(name === 'downloadImg'){
+      console.log(url);
       ipcRenderer.send("window-download",url)
     }
   }  

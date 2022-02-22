@@ -35,8 +35,9 @@ function createWindow() {
         mainWindow.close();
     })
     // FIXME:下载图片
-    ipcMain.on('window-download',function(arg){
-        console.log(23333,arg);
+    ipcMain.on('window-download',function(evt,arg){
+        console.log('数据消息==>',arg);
+        mainWindow.webContents.downloadURL(arg);
     })
     // 新建托盘
     tray = new Tray(path.join(__dirname, '../public/icon.ico'));
