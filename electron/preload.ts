@@ -23,5 +23,8 @@ contextBridge.exposeInMainWorld('electron',{
       console.log(url);
       ipcRenderer.send("window-download",url)
     }
+  },
+  receive:(channel,func)=>{
+    ipcRenderer.on(channel,(event,...args)=>func(...args))
   }  
 })

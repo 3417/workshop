@@ -101,6 +101,9 @@ const handleItem = (ik: Number,$event:any) => {
 onMounted(() => {
   getBackImg();
   getSpeech();
+  window.electron.receive('window-resize',function(evt:any,args:any){
+    vmenu.value[0].text = evt ? '还原':'全屏化'
+  })
 });
 timer.value = window.setInterval(() => {
   getBackImg();
