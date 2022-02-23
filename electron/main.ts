@@ -1,26 +1,14 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray,dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray, dialog } = require('electron');
 const path = require('path');
 let mainWindow = null;
 let loading = null;
 let tray = null;
-const NODE_DEV = process.env.NODE_ENV ? process.env.NODE_ENV.trim():'';
+const NODE_DEV = process.env.NODE_ENV ? process.env.NODE_ENV.trim() : '';
 console.log(NODE_DEV)
-function showLoading(callback){
-    loading = new BrowserWindow({
-        show:false,
-        frame:false,
-        width:420,
-        height:300,
-        transparent:true,
-        resizeble:false
-    })
-    loading.once('show',callback);
-    loading.loadURL(`file://${path.join(__dirname, '../splash.html')}`)
-    loading.show();
-}
 function createWindow() {
     // 创建浏览器窗口
     mainWindow = new BrowserWindow({
+        show:false,
         width: 900,
         height: 600,
         frame: false,
@@ -30,26 +18,43 @@ function createWindow() {
             nodeIntegration: true,
         }
     })
+    loading = new BrowserWindow({
+        frame: false,
+        width: 640,
+        height: 595,
+        transparent: true,
+        resizeble: false,
+        alwaysOnTop:true,
+        center:true
+    })
+    loading.loadURL(`file://${path.join(__dirname, NODE_DEV === 'dev' ? '../public/splash.html' : '../dist/splash.html')}`)
+    loading.show();
     mainWindow.loadURL(NODE_DEV === 'dev' ? "http://localhost:9527" : `file://${path.join(__dirname, '../dist/index.html')}`)
     // mainWindow.webContents.openDevTools()
+    mainWindow.once('ready-to-show',function(){
+        setTimeout(() => {
+            loading.destroy();
+            mainWindow.show();
+        }, 4500);
+    })
     // 窗口最小化
     ipcMain.on('window-min', function () {
         mainWindow.minimize();
     })
 
     // 窗口最大化
-    ipcMain.on('window-max', function (evt,arg) {
+    ipcMain.on('window-max', function (evt, arg) {
         if (mainWindow.isMaximized()) {
             mainWindow.unmaximize();
         } else {
             mainWindow.maximize();
         }
-        evt.sender.send('window-resize',mainWindow.isMaximized());
+        evt.sender.send('window-resize', mainWindow.isMaximized());
     })
     ipcMain.on('window-close', function () {
         mainWindow.close();
     })
-    ipcMain.on('window-download',function(evt,arg){
+    ipcMain.on('window-download', function (evt, arg) {
         mainWindow.webContents.downloadURL(arg);
     })
     // 新建托盘
@@ -82,25 +87,21 @@ function createWindow() {
     // })
 }
 
+
 app.whenReady().then(() => {
-    showLoading(()=>{});
-    setTimeout(() => {
-        loading.hide();
-        loading.close();
-        createWindow();
-      }, 3500)
+    createWindow();
     app.on('activate', function () {
         // 通常在 macOS 上，当点击 dock 中的应用程序图标时，如果没有其他
         // 打开的窗口，那么程序会重新创建一个窗口。
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
+        // 防止多开
+        const gotTheLock = app.requestSingleInstanceLock()
+        if (!gotTheLock) {
+            app.quit()
+        }
     })
 })
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') app.quit()
 })
-// 防止多开
-const gotTheLock = app.requestSingleInstanceLock()
-if (!gotTheLock) {
-    app.quit()
-}
