@@ -20,8 +20,8 @@ function createWindow() {
     })
     loading = new BrowserWindow({
         frame: false,
-        width: 640,
-        height: 595,
+        width: 500,
+        height: 462,
         transparent: true,
         resizeble: false,
         alwaysOnTop:true,
@@ -35,7 +35,7 @@ function createWindow() {
         setTimeout(() => {
             loading.destroy();
             mainWindow.show();
-        }, 4500);
+        }, 6*1000);
     })
     // 窗口最小化
     ipcMain.on('window-min', function () {
