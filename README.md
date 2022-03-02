@@ -14,3 +14,4 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 [x] 全屏化，最小化，随机壁纸，关闭应用
 [x] 下载壁纸
 [x] 启动飞溅屏
+[ ] 每日签到功能

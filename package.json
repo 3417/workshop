@@ -30,8 +30,8 @@
   },
   "build": {
     "appId": "com.3417.github.io",
-    "productName": "relax",
-    "copyright": "Copyright © 2021 Jone",
+    "productName": "relaxed",
+    "copyright": "Copyright © 2022 Jone",
     "win": {
       "target": [
         "nsis",
