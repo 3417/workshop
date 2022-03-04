@@ -33,6 +33,7 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, onBeforeUnmount, defineComponent } from "vue";
+import {useStore} from 'vuex';
 import defaultImgs from "@as/imgs/default.jpg";
 // import { useRouter, useRoute } from "vue-router";
 const bgImg = ref(defaultImgs);
@@ -40,6 +41,7 @@ const vhitokoto = ref("");
 const vfrom = ref("");
 const vfrom_who = ref("");
 const isTips = ref(false);
+const store = useStore();
 const vmenu = ref([
   { text: "全屏化", id: 1 },
   { text: "最小化", id: 2 },
@@ -83,6 +85,7 @@ const getSpeech = () => {
       vhitokoto.value = hitokoto;
       vfrom.value = from;
       vfrom_who.value = from_who;
+      store.commit('SET_VOTO',data);
     })
     .catch(console.error);
 };

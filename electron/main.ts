@@ -12,7 +12,7 @@ function createWindow() {
         width: 900,
         height: 600,
         frame: false,
-        maximizable: false,
+        // maximizable: false,  //禁止双击放大
         webPreferences: {
             preload: path.join(__dirname, './preload.ts'),
             nodeIntegration: true,
@@ -58,7 +58,7 @@ function createWindow() {
         mainWindow.webContents.downloadURL(arg);
     })
     // 新建托盘
-    tray = new Tray(path.join(__dirname, NODE_DEV === 'dev' ? '../public/icon.ico' : '/dist/icon.ico'));
+    tray = new Tray(path.join(__dirname, NODE_DEV === 'dev' ? '../public/icon.ico' : '../dist/icon.ico'));
     tray.setToolTip('Electron Relax');
     const contextMenu = Menu.buildFromTemplate([
         {
