@@ -35,13 +35,13 @@ function createWindow() {
         setTimeout(() => {
             loading.destroy();
             mainWindow.show();
+            mainWindow.webContents.send('main_show','ready');
         }, 6*1000);
     })
     // 窗口最小化
     ipcMain.on('window-min', function () {
         mainWindow.minimize();
     })
-
     // 窗口最大化
     ipcMain.on('window-max', function (evt, arg) {
         if (mainWindow.isMaximized()) {

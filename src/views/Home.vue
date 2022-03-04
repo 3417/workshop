@@ -8,7 +8,8 @@ import Solar from "@cp/solar.vue";
 import sign from "@cp/sign.vue";
 import { onMounted, ref } from "vue";
 const show = ref(false);
-const isShow = () => {
+// 目前只做了每次打开就幸运签
+const isShow = (num:number) => {
   let _show = window.sessionStorage.getItem("S");
   if (_show) {
     show.value = false;
@@ -17,12 +18,14 @@ const isShow = () => {
     setTimeout(() => {
       show.value = false;
       window.sessionStorage.setItem("S", "ok");
-    }, 6666);
+    }, 6666+num);
   }
 };
 
 onMounted(() => {
-  isShow();
+  window.electron.receive('main_show',function(evt:any,args:any){
+      isShow(6000)
+  })
 });
 </script>
 
