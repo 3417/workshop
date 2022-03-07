@@ -24,7 +24,7 @@ const isShow = (num:number) => {
 
 onMounted(() => {
   window.electron.receive('main_show',function(evt:any,args:any){
-      isShow(2200)
+      isShow(1500)
   })
 });
 </script>

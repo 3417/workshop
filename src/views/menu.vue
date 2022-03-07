@@ -33,7 +33,7 @@ const props = defineProps({
     bgImg:{type:String,default:''}
 })
 
-const vDrag = { //TODO:移动要加判断
+const vDrag = { //TODO:移动范围不加限制条件
   mounted(el: any, binding: any, vnode: any) {
     function onDown(e:any) {
       console.log(23333,e);
@@ -51,6 +51,7 @@ const vDrag = { //TODO:移动要加判断
 };
 
 const handleItem = (ik: Number, $event: any) => {
+  const dom:any = document.querySelector("#menu");
   if (ik === 1) {
     window.electron.send("maxBox");
   } else if (ik === 2) {
@@ -59,9 +60,10 @@ const handleItem = (ik: Number, $event: any) => {
     emit('getParentFn')
   } else if (ik === 4) {
     window.electron.send("downloadImg", props.bgImg);
-  } else {
+  } else if(ik === 5) {
     window.electron.send("close");
   }
+  dom.checked = false;
 };
 </script>
 
@@ -100,17 +102,6 @@ a {
   text-align: center;
   transition: all 0.8s;
 }
-
-.menu p {
-  max-width: 85px;
-  text-align: center;
-  margin: 0 auto;
-  line-height: 15px;
-  padding-top: 50px;
-  font-weight: 700;
-  font-size: 2em;
-}
-
 .toggle + .style:hover {
   box-shadow: inset 0px 1px 20px 0px rgba(0, 0, 0, 0.7);
 }
