@@ -16,7 +16,8 @@
       backgroundSize: '100% 100%',
     }"
   ></div>
-  <div class="zoom-flex" v-contextmenu="vmenu">
+  <!-- 屏蔽右键菜单 -->
+  <!-- <div class="zoom-flex" v-contextmenu="vmenu">
     <div
       class="zoom"
       :title="iv.text"
@@ -26,14 +27,18 @@
     >
       {{ iv.text }}
     </div>
-  </div>
+  </div> -->
   <div class="zoom-move"></div>
   <!-- 数据更新完成提示框 -->
   <div :class="['zoom-tips', { 'zoom-in': isTips }]">壁纸切换成功</div>
+
+  <!-- 菜单按钮快捷键 -->
+  <v-menus />
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, onBeforeUnmount, defineComponent } from "vue";
-import {useStore} from 'vuex';
+import { useStore } from "vuex";
+import vMenus from '@/views/menu.vue';
 import defaultImgs from "@as/imgs/default.jpg";
 // import { useRouter, useRoute } from "vue-router";
 const bgImg = ref(defaultImgs);
@@ -43,11 +48,11 @@ const vfrom_who = ref("");
 const isTips = ref(false);
 const store = useStore();
 const vmenu = ref([
-  { text: "全屏化", id: 1 },
-  { text: "最小化", id: 2 },
-  { text: "随机壁纸", id: 3 },
-  { text: "下载当前壁纸", id: 4 },
-  { text: "关闭应用", id: 5 },
+  { text: "全屏化", id: 1, iconName: "fa-icon" },
+  { text: "最小化", id: 2, iconName: "fa-icon" },
+  { text: "随机壁纸", id: 3, iconName: "fa-icon" },
+  { text: "下载当前壁纸", id: 4, iconName: "fa-icon" },
+  { text: "关闭应用", id: 5, iconName: "fa-icon" },
 ]);
 // const route = useRouter();
 const timer = ref(0);
@@ -85,10 +90,15 @@ const getSpeech = () => {
       vhitokoto.value = hitokoto;
       vfrom.value = from;
       vfrom_who.value = from_who;
-      store.commit('SET_VOTO',data);
+      store.commit("SET_VOTO", data);
     })
     .catch(console.error);
 };
+
+const getParentFn = () =>{
+  getBackImg();
+  getSpeech();
+}
 
 // 点击事件
 const handleItem = (ik: Number, $event: any) => {
@@ -109,15 +119,12 @@ const handleItem = (ik: Number, $event: any) => {
   $events.style.zIndex = -1000;
 };
 onMounted(() => {
-  getBackImg();
-  getSpeech();
-  // window.electron.receive('window-resize',function(evt:any,args:any){
-  //   vmenu.value[0].text = evt ? '还原':'全屏化'
-  // })
+  // getBackImg();
+  // getSpeech();
 });
 timer.value = window.setInterval(() => {
-  getBackImg();
-  getSpeech();
+  // getBackImg();
+  // getSpeech();
 }, 5 * 60 * 1000);
 onBeforeUnmount(() => {
   clearInterval(timer.value);

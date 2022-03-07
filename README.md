@@ -15,3 +15,5 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 [x] 下载壁纸
 [x] 启动飞溅屏
 [x] 每日签到功能
+[ ] 快捷方式集成到页面按钮上
+
