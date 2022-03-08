@@ -33,7 +33,7 @@
   <div :class="['zoom-tips', { 'zoom-in': isTips }]">壁纸切换成功</div>
 
   <!-- 菜单按钮快捷键 -->
-  <v-menus />
+  <v-menus @getParentFn="getParentFn"/>
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, onBeforeUnmount, defineComponent } from "vue";
@@ -100,6 +100,10 @@ const getParentFn = () =>{
   getSpeech();
 }
 
+const getfn  =()=>{
+  console.log(2222)
+}
+
 // 点击事件
 const handleItem = (ik: Number, $event: any) => {
   if (ik === 1) {
@@ -119,12 +123,10 @@ const handleItem = (ik: Number, $event: any) => {
   $events.style.zIndex = -1000;
 };
 onMounted(() => {
-  // getBackImg();
-  // getSpeech();
+  getParentFn();
 });
 timer.value = window.setInterval(() => {
-  // getBackImg();
-  // getSpeech();
+  getParentFn();
 }, 5 * 60 * 1000);
 onBeforeUnmount(() => {
   clearInterval(timer.value);

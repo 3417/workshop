@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <input class="toggle" id="menu" type="checkbox" />
-    <label class="style" for="menu" v-drag="{}">
+    <label class="style" for="menu" >
       <i class="fa fa-bars" aria-hidden="true"></i>
     </label>
     <a
@@ -35,16 +35,29 @@ const props = defineProps({
 
 const vDrag = { //TODO:移动范围不加限制条件
   mounted(el: any, binding: any, vnode: any) {
+    let disX:number,disY:number;
     function onDown(e:any) {
-      console.log(23333,e);
-      const { clientX, clientY, offsetX, offsetY } = e;
-      document.onmousemove = (e) => {onMove(e);};
-      document.onmouseup = (e) => {onDrop(e);};
+      const { clientX, clientY } = e;
+      const odiv = e.target;
+      el.setCapture &&　el.setCapture();
+      // 计算元素的相对位置
+      disX = clientX - odiv.offsetLeft;
+      disY = clientY - odiv.offsetTop;
+      document.onmousemove = (e) => {onMove(e)};
+      document.onmouseup = (e) => {onDrop(e)};
     }
-
-    function onDrop(e: any) {}
+    function onDrop(e: any) {
+      document.onmousemove = null;
+      document.onmouseup = null;
+      el.releaseCapture &&　el.releaseCapture();
+    }
     function onMove(e: any) {
-      const { clientX, clientY, offsetX, offsetY } = e;
+      let {clientX,clientY} = e;
+      let left = clientX - disX;
+      let top = clientY - disY;
+      // 移动当前元素
+      el.style.left = left +'px';
+      el.style.top = top +'px';
     }
     el.addEventListener("mousedown", onDown);
   },
@@ -63,7 +76,7 @@ const handleItem = (ik: Number, $event: any) => {
   } else if(ik === 5) {
     window.electron.send("close");
   }
-  dom.checked = false;
+  // dom.checked = false;
 };
 </script>
 
@@ -72,12 +85,10 @@ a {
   text-decoration: none;
 }
 .menu {
-  position: fixed;
-  margin-top: 10%;
-  right: 14%;
-  width: 0;
-  top: 20px;
-  transform: translate(-50%, 55%);
+  position: absolute;
+  right: 6%;
+  top: 26%;
+  transform: translate(-50%,-50%);
 }
 
 .toggle {
