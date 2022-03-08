@@ -28,17 +28,18 @@
       {{ iv.text }}
     </div>
   </div> -->
-  <div class="zoom-move"></div>
+  <div class="zoom_coxt">
+    <div class="zoom-move"></div>
+    <!-- 菜单按钮快捷键 -->
+    <v-menus @getParentFn="getParentFn" :bgImg="bgImg"/>
+  </div>
   <!-- 数据更新完成提示框 -->
   <div :class="['zoom-tips', { 'zoom-in': isTips }]">壁纸切换成功</div>
-
-  <!-- 菜单按钮快捷键 -->
-  <v-menus @getParentFn="getParentFn"/>
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, onBeforeUnmount, defineComponent } from "vue";
 import { useStore } from "vuex";
-import vMenus from '@/views/menu.vue';
+import vMenus from "@/views/menu.vue";
 import defaultImgs from "@as/imgs/default.jpg";
 // import { useRouter, useRoute } from "vue-router";
 const bgImg = ref(defaultImgs);
@@ -95,14 +96,10 @@ const getSpeech = () => {
     .catch(console.error);
 };
 
-const getParentFn = () =>{
+const getParentFn = () => {
   getBackImg();
   getSpeech();
-}
-
-const getfn  =()=>{
-  console.log(2222)
-}
+};
 
 // 点击事件
 const handleItem = (ik: Number, $event: any) => {
@@ -220,14 +217,20 @@ const vContextmenu = {
   opacity: 0;
 }
 
-.zoom-move {
+.zoom_coxt {
+  display: flex;
+  justify-content: space-around;
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 20px;
-  -webkit-app-region: drag;
+  width:100%;
+  .zoom-move {
+    flex:1;
+    height: 20px;
+    -webkit-app-region: drag;
+  }
 }
+
 .zoom {
   margin: 1px 0px;
   cursor: pointer;

@@ -1,213 +1,147 @@
 <template>
   <div class="menu">
-    <input class="toggle" id="menu" type="checkbox" />
-    <label class="style" for="menu" >
-      <i class="fa fa-bars" aria-hidden="true"></i>
-    </label>
-    <a
-      class="tab"
-      href="#"
-      v-for="(iv, ik) in vmenu"
-      :key="ik"
-      :title="iv.text"
-      @click="handleItem(iv.id, $event)"
-    >
-      <i :class="['fa', iv.iconName]"></i>
-    </a>
+    <div class="menu_top">
+      <div class="menu_top__menus" v-html="iconSVG['menu']"></div>
+      <div class="menu_child">
+        <div class="menu_child__items" v-for="(ij, il) in vbars" :key="il" @click="handleItem(ij.id)">
+          {{ ij.text }}
+        </div>
+      </div>
+    </div>
+    <div class="menu-bars">
+      <div
+        class="menu_svg"
+        v-for="(iv, ik) in vmenu"
+        :key="ik"
+        v-html="iconSVG[iv.actName]"
+        @click="handleItem(iv.id)"
+        :title="iv.text"
+      ></div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+const iconSVG = {
+  menu: `<svg t="1646720433535" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2757" width="22" height="22"><path d="M384 480H192c-52.8 0-96-43.2-96-96V192c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM192 160c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V192c0-17.6-14.4-32-32-32H192zM832 480H640c-52.8 0-96-43.2-96-96V192c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM640 160c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V192c0-17.6-14.4-32-32-32H640zM384 928H192c-52.8 0-96-43.2-96-96V640c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM192 608c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V640c0-17.6-14.4-32-32-32H192zM832 928H640c-52.8 0-96-43.2-96-96V640c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM640 608c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V640c0-17.6-14.4-32-32-32H640z" p-id="2758" fill="#ffffff"></path></svg>`,
+  min: `<svg t="1646720570692" class="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5143" width="22" height="22"><path d="M895.531061 534.934007 126.604444 534.934007c-13.5716 0-24.573248-11.001648-24.573248-24.573248s11.001648-24.573248 24.573248-24.573248l768.926616 0c13.5716 0 24.573248 11.001648 24.573248 24.573248S909.102661 534.934007 895.531061 534.934007z" p-id="5144" fill="#ffffff"></path></svg>`,
+  close: `<svg t="1646720535589" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3551" width="22" height="22"><path d="M557.312 513.248l265.28-263.904c12.544-12.48 12.608-32.704 0.128-45.248-12.512-12.576-32.704-12.608-45.248-0.128l-265.344 263.936-263.04-263.84C236.64 191.584 216.384 191.52 203.84 204 191.328 216.48 191.296 236.736 203.776 249.28l262.976 263.776L201.6 776.8c-12.544 12.48-12.608 32.704-0.128 45.248 6.24 6.272 14.464 9.44 22.688 9.44 8.16 0 16.32-3.104 22.56-9.312l265.216-263.808 265.44 266.24c6.24 6.272 14.432 9.408 22.656 9.408 8.192 0 16.352-3.136 22.592-9.344 12.512-12.48 12.544-32.704 0.064-45.248L557.312 513.248z" p-id="3552" fill="#ffffff"></path></svg>`,
+  max: `<svg t="1646720549797" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4356" width="22" height="22"><path d="M917.268 132.531H106.732c-38.99 0-70.892 31.898-70.892 70.892v612.034c0 38.99 31.903 70.892 70.892 70.892h810.536c38.99 0 70.892-31.903 70.892-70.892V203.423c0-38.994-31.903-70.892-70.892-70.892z m12.335 689.813H93.809V195.948h835.788v626.396z" fill="#ffffff" p-id="4357"></path></svg>`,
+  restore: `<svg t="1646720608178" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6074" width="22" height="22"><path d="M192 64l0 192L0 256l0 704 832 0 0-192 192 0L1024 64 192 64zM768 896 64 896 64 320l704 0L768 896zM960 704l-128 0L832 256 256 256 256 128l704 0L960 704z" p-id="6075" fill="#ffffff"></path></svg>`,
+};
 const vmenu = ref([
-  { text: "全屏化", id: 1, iconName: "fa-window-maximize" },
-  { text: "最小化", id: 2, iconName: "fa-window-minimize" },
-  { text: "随机壁纸", id: 3, iconName: "fa-random" },
-  { text: "下载当前壁纸", id: 4, iconName: "fa-download" },
-  { text: "关闭应用", id: 5, iconName: "fa-window-close-o" },
-  { text: "占位", id: 6, iconName: "fa-ban" },
+  { text: "最小化", id: 2, actName: "min" },
+  { text: "全屏化", id: 1, actName: "max"},
+  { text: "关闭应用", id: 5, actName: "close" },
 ]);
 
-const emit = defineEmits(['getParentFn'])
-const props = defineProps({
-    bgImg:{type:String,default:''}
-})
+const vbars = ref([
+  { text: "随机壁纸", id: 3 },
+  { text: "下载当前壁纸", id: 4 },
+]);
 
-const vDrag = { //TODO:移动范围不加限制条件
+const emit = defineEmits(["getParentFn"]);
+const props = defineProps({
+  bgImg: { type: String, default: "" },
+});
+
+const vDrag = {
   mounted(el: any, binding: any, vnode: any) {
-    let disX:number,disY:number;
-    function onDown(e:any) {
+    let disX: number, disY: number;
+    function onDown(e: any) {
       const { clientX, clientY } = e;
       const odiv = e.target;
-      el.setCapture &&　el.setCapture();
+      el.setCapture && el.setCapture();
       // 计算元素的相对位置
       disX = clientX - odiv.offsetLeft;
       disY = clientY - odiv.offsetTop;
-      document.onmousemove = (e) => {onMove(e)};
-      document.onmouseup = (e) => {onDrop(e)};
+      document.onmousemove = (e) => {
+        onMove(e);
+      };
+      document.onmouseup = (e) => {
+        onDrop(e);
+      };
     }
     function onDrop(e: any) {
       document.onmousemove = null;
       document.onmouseup = null;
-      el.releaseCapture &&　el.releaseCapture();
+      el.releaseCapture && el.releaseCapture();
     }
     function onMove(e: any) {
-      let {clientX,clientY} = e;
+      let { clientX, clientY } = e;
       let left = clientX - disX;
       let top = clientY - disY;
       // 移动当前元素
-      el.style.left = left +'px';
-      el.style.top = top +'px';
+      el.style.left = left + "px";
+      el.style.top = top + "px";
     }
     el.addEventListener("mousedown", onDown);
   },
 };
 
-const handleItem = (ik: Number, $event: any) => {
-  const dom:any = document.querySelector("#menu");
+const handleItem = (ik: Number) => {
   if (ik === 1) {
     window.electron.send("maxBox");
   } else if (ik === 2) {
     window.electron.send("minBox");
   } else if (ik === 3) {
-    emit('getParentFn')
+    emit("getParentFn");
   } else if (ik === 4) {
     window.electron.send("downloadImg", props.bgImg);
-  } else if(ik === 5) {
+  } else if (ik === 5) {
     window.electron.send("close");
   }
-  // dom.checked = false;
 };
+
+onMounted(()=>{
+  window.electron.receive('window-resize',function(evt:any,args:any){
+      let obj = {text:"还原",id:1,actName:'restore'};
+      let nobj = {text:"全屏化",id:1,actName:'max'};
+      evt ? vmenu.value.splice(1,1,obj) :  vmenu.value.splice(1,1,nobj)
+  })
+})
 </script>
 
 <style lang="scss" scoped>
-a {
-  text-decoration: none;
-}
 .menu {
-  position: absolute;
-  right: 6%;
-  top: 26%;
-  transform: translate(-50%,-50%);
-}
-
-.toggle {
-  display: none;
-}
-
-.toggle + .style {
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
-  border-radius: 50%;
-  cursor: pointer;
-  transform: translate(-50%, -50%) scale(1);
-  z-index: 5;
-  display: block;
-  max-width: 60px;
-  margin-bottom: 0;
-  background: rgba(255, 255, 255, 0.52);
-  box-shadow: inset 2px 2px 4px rgb(0 0 0 / 30%);
+  padding: 2px 6px;
+  box-sizing: border-box;
   color: #fff;
-  font-size: 1.8em;
-  text-align: center;
-  transition: all 0.8s;
-}
-.toggle + .style:hover {
-  box-shadow: inset 0px 1px 20px 0px rgba(0, 0, 0, 0.7);
-}
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  .menu-bars {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    .menu_svg {
+      margin: 0 8px;
+    }
+  }
 
-.toggle:checked + .style {
-  transform: translate(-50%, -50%) scale(0.96);
-}
-
-.menu input[type="checkbox"] + label:before {
-  content: "";
-  position: absolute;
-}
-
-.toggle + .style:before,
-.toggle + .style:after {
-  content: "";
-  position: absolute;
-  margin: -3px;
-  border-radius: 5px;
-  transition: all 0.3s;
-}
-
-.toggle + .style:before {
-  width: 30px;
-  height: 0px;
-  left: 10px;
-  top: 25px;
-}
-
-.toggle + .style:after {
-  width: 0px;
-  height: 30px;
-  left: 25px;
-  top: 10px;
-}
-
-.toggle:checked + .style:before,
-.toggle:checked + .style:after {
-  transform: rotate(135deg);
-}
-
-.toggle ~ .tab {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.52);
-  box-shadow: inset 2px 2px 4px rgb(0 0 0 / 30%);
-  color: #fff;
-  width: 55px;
-  height: 55px;
-  line-height: 55px;
-  text-align: center;
-  left: 0;
-  top: 0;
-  transform: translate(-50%, -50%) scale(0);
-  transition: all 0.3s;
-  opacity: 0;
-  border-radius: 50%;
-}
-
-.toggle:checked ~ .tab {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.menu > .toggle:checked ~ .tab:nth-of-type(1) {
-  top: -80px;
-  left: 0px;
-  transition-delay: 0s;
-}
-
-.menu > .toggle:checked ~ .tab:nth-of-type(2) {
-  top: -46px;
-  left: 70px;
-  transition-delay: 0.125s;
-}
-
-.menu > .toggle:checked ~ .tab:nth-of-type(3) {
-  top: 36px;
-  left: 80px;
-  transition-delay: 0.25s;
-}
-
-.menu > .toggle:checked ~ .tab:nth-of-type(4) {
-  top: 80px;
-  left: 0px;
-  transition-delay: 0.375s;
-}
-
-.menu > .toggle:checked ~ .tab:nth-of-type(5) {
-  top: 46px;
-  left: -70px;
-  transition-delay: 0.5s;
-}
-.menu > .toggle:checked ~ .tab:nth-of-type(6) {
-  top: -36px;
-  left: -80px;
-  transition-delay: 0.625s;
+  .menu_top {
+    position:relative;
+    user-select: none;
+    &:hover .menu_child {
+      display: block;
+    }
+    .menu_child {
+      display: none;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      position: absolute;
+      left:0;
+      min-width:120px;
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      .menu_child__items {
+        padding: 10px 12px;
+        &:hover {
+          background-color: #34382b;
+        }
+      }
+    }
+  }
 }
 </style>
