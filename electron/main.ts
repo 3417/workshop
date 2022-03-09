@@ -21,7 +21,7 @@ function createWindow() {
     loading = new BrowserWindow({
         frame: false,
         width: 500,
-        height: 462,
+        height: 580,
         transparent: true,
         resizeble: false,
         alwaysOnTop:true,

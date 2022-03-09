@@ -18,7 +18,7 @@ const isShow = (num:number) => {
     setTimeout(() => {
       show.value = false;
       window.sessionStorage.setItem("S", "ok");
-    }, 6666+num);
+    }, 4666+num);
   }
 };
 
