@@ -18,13 +18,13 @@ const isShow = (num:number) => {
     setTimeout(() => {
       show.value = false;
       window.sessionStorage.setItem("S", "ok");
-    }, 6666+num);
+    }, 3666+num);
   }
 };
 
 onMounted(() => {
   window.electron.receive('main_show',function(evt:any,args:any){
-      isShow(1500)
+      isShow(100)
   })
 });
 </script>
