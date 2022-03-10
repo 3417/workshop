@@ -62,7 +62,7 @@ function getDate() {
       11: "Nov",
       12: "Dec",
     };
-  day.value = _day.getDate() < 10 ? "0" + _day.getDate() : String(_day);
+  day.value = _day.getDate() < 10 ? "0" + _day.getDate() : String(_day.getDate());
   month.value = enMonth[_day.getMonth() + 1];
 }
 

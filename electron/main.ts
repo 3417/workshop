@@ -35,8 +35,9 @@ function createWindow() {
         setTimeout(() => {
             loading.destroy();
             mainWindow.show();
+            trayMenu();
             mainWindow.webContents.send('main_show','ready');
-        }, 6*1000);
+        }, 3*1000);
     })
     // 窗口最小化
     ipcMain.on('window-min', function () {
@@ -57,24 +58,6 @@ function createWindow() {
     ipcMain.on('window-download', function (evt, arg) {
         mainWindow.webContents.downloadURL(arg);
     })
-    // 新建托盘
-    tray = new Tray(path.join(__dirname, NODE_DEV === 'dev' ? '../public/icon.ico' : '../dist/icon.ico'));
-    tray.setToolTip('Electron Relax');
-    const contextMenu = Menu.buildFromTemplate([
-        {
-            label: "显示",
-            click: () => { mainWindow.show() }
-        },
-        {
-            label: "退出",
-            click: () => { mainWindow.destroy() }
-        }
-    ])
-    tray.setContextMenu(contextMenu);
-    tray.on('double-click', () => {
-        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
-        mainWindow.isVisible() ? mainWindow.setSkipTaskbar(false) : mainWindow.setSkipTaskbar(true);
-    })
     // 屏蔽拖拽的右键事件(生产环境无效)
     // mainWindow.hookWindowMessage(278, function (e) {
     //     mainWindow.blur();
@@ -85,6 +68,27 @@ function createWindow() {
     //     }, 100);
     //     return true;
     // })
+}
+
+function trayMenu(){
+        // 新建托盘
+        tray = new Tray(path.join(__dirname, NODE_DEV === 'dev' ? '../public/icon.ico' : '../dist/icon.ico'));
+        tray.setToolTip('Electron Relax');
+        const contextMenu = Menu.buildFromTemplate([
+            {
+                label: "显示",
+                click: () => { mainWindow.show() }
+            },
+            {
+                label: "退出",
+                click: () => { mainWindow.destroy() }
+            }
+        ])
+        tray.setContextMenu(contextMenu);
+        tray.on('double-click', () => {
+            mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+            mainWindow.isVisible() ? mainWindow.setSkipTaskbar(false) : mainWindow.setSkipTaskbar(true);
+        })
 }
 
 
