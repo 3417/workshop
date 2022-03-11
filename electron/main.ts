@@ -37,7 +37,7 @@ function createWindow() {
             mainWindow.show();
             trayMenu();
             mainWindow.webContents.send('main_show','ready');
-        }, 2.5*1000);
+        }, 600);
     })
     // 窗口最小化
     ipcMain.on('window-min', function () {
