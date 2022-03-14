@@ -20,7 +20,7 @@ function createWindow() {
     })
     loading = new BrowserWindow({
         frame: false,
-        width: 500,
+        width: 470,
         height: 580,
         transparent: true,
         resizeble: false,
@@ -42,6 +42,7 @@ function createWindow() {
     // 窗口最小化
     ipcMain.on('window-min', function () {
         mainWindow.minimize();
+        mainWindow.hide();
     })
     // 窗口最大化
     ipcMain.on('window-max', function (evt, arg) {
