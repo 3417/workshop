@@ -20,8 +20,8 @@ function createWindow() {
     })
     loading = new BrowserWindow({
         frame: false,
-        width: 470,
-        height: 580,
+        width: 242,
+        height: 242,
         transparent: true,
         resizeble: false,
         alwaysOnTop:true,
@@ -33,11 +33,12 @@ function createWindow() {
     // mainWindow.webContents.openDevTools()
     mainWindow.once('ready-to-show',function(){
         setTimeout(() => {
-            loading.destroy();
+            loading.hide();
+            loading.close();
             mainWindow.show();
             trayMenu();
             mainWindow.webContents.send('main_show','ready');
-        }, 600);
+        }, 300);
     })
     // 窗口最小化
     ipcMain.on('window-min', function () {

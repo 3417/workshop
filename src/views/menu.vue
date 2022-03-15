@@ -137,7 +137,7 @@ onMounted(()=>{
       .menu_child__items {
         padding: 10px 12px;
         &:hover {
-          background-color: #34382b;
+          background-color: #041dd7;
         }
       }
     }

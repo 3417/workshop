@@ -24,7 +24,8 @@ const isShow = (num:number) => {
 
 onMounted(() => {
   window.electron.receive('main_show',function(evt:any,args:any){
-      isShow(200)
+      console.log("加载主页面-显示签到模块, %c I am ready","color:#0f0;font-size:32px;");
+      isShow(100);
   })
 });
 </script>
