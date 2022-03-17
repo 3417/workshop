@@ -17,14 +17,6 @@ const router = createRouter({
             meta:{
                 title:"泰然如者"
             },
-        },
-        {
-            path:'/color',
-            name:'color',
-            component:()=>import('../views/color.vue'),
-            meta:{
-                title:"渐变"
-            },
         }
     ]
 })
