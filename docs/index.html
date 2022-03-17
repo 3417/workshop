@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title></title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <style>
+    *{
+      padding:0;
+      margin:0;
+    }
+    .random_color {
+      font-size: 6em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+
+    }
+
+    .random_text {
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="random_color" :style="{
+        backgroundImage: `linear-gradient(${deg}deg, ${color1},${color2})`,
+      }">
+      <div class="random_text" :style="{
+          backgroundImage: `linear-gradient(${deg}deg, ${color1},${color2})`,
+        }">
+        <p>愚蠢的大海</p>
+        <p>愚蠢的郑军</p>
+      </div>
+    </div>
+    <audio autoplay>
+      <source src="./dj.mp3" type="audio/mp3" />
+    </audio>
+  </div>
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        deg: 0,
+        color1: "",
+        color2: "",
+        time:100,
+      },
+      mounted() {
+        const getColor = () => {
+          return (
+            "#" + ("00000" + ((Math.random() * 0x1000000) << 0).toString(16)).substr(-6)
+          );
+        };
+
+        function randomNum() {
+          const num = Math.floor(Math.random() * 360);
+          return num < 10 ? num * 17 : num;
+        }
+
+        const setColor = () => {
+          setInterval(() => {
+            this.color1 = getColor();
+            this.color2 = getColor();
+            this.deg = randomNum();
+          }, this.time);
+        };
+        setColor();
+      }
+    })
+  </script>
+</body>
+
+</html>
