@@ -7,10 +7,11 @@
   <title></title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
   <style>
-    *{
-      padding:0;
-      margin:0;
+    * {
+      padding: 0;
+      margin: 0;
     }
+
     .random_color {
       font-size: 6em;
       display: flex;
@@ -24,6 +25,16 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: bold;
+    }
+
+    .play {
+      background: url('./play.png') no-repeat;
+      width: 26px;
+      height: 26px;
+      background-size: 100% auto;
+      position: absolute;
+      right: 220px;
+      top: 20px;
     }
   </style>
 </head>
@@ -40,9 +51,10 @@
         <p>愚蠢的郑军</p>
       </div>
     </div>
-    <audio autoplay>
-      <source src="./dj.mp3" type="audio/mp3" />
+    <audio src="./dj.mp3" autoplay id="mp3">
     </audio>
+
+    <p class="play" title="点我啊，想什么勒？嗨起来，好嘛。" @click="autoPlayMusic"></p>
   </div>
   <script>
     new Vue({
@@ -51,7 +63,7 @@
         deg: 0,
         color1: "",
         color2: "",
-        time:100,
+        time: 100,
       },
       mounted() {
         const getColor = () => {
@@ -64,7 +76,6 @@
           const num = Math.floor(Math.random() * 360);
           return num < 10 ? num * 17 : num;
         }
-
         const setColor = () => {
           setInterval(() => {
             this.color1 = getColor();
@@ -73,6 +84,13 @@
           }, this.time);
         };
         setColor();
+        this.myaudio = new Audio();
+        this.myaudio.src = "./dj.mp3";
+      },
+      methods: {
+        autoPlayMusic() {
+          this.myaudio.play();
+        }
       }
     })
   </script>
