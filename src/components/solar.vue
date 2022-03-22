@@ -3,9 +3,9 @@
     <div class="solar_hit">
       <p class="solar_koto">{{ vhitokoto }}</p>
       <p class="solar_ple">
-        <span>{{ vfrom ? vfrom : "未知" }}</span>
+        <span>{{ vfrom || "未知" }}</span>
         <span>——</span>
-        <span>{{ vfrom_who ? vfrom_who : "未知" }}</span>
+        <span>{{ vfrom_who || "未知" }}</span>
       </p>
     </div>
   </div>

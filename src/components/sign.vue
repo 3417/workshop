@@ -19,9 +19,9 @@
         <div class="sign_bane">
           <p class="_hitokoto">{{ covto.hitokoto }}</p>
           <p class="_name">
-            <span>{{ covto.from ? covto.from : "未知" }}</span>
+            <span>{{ covto.from || "未知" }}</span>
             <span>——</span>
-            <span>{{ covto.from_who ? covto.from_who : "未知" }}</span>
+            <span>{{ covto.from_who ||  "未知" }}</span>
           </p>
         </div>
       </div>
