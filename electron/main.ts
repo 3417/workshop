@@ -23,6 +23,7 @@ function createWindow() {
         width: 242,
         height: 242,
         transparent: true,
+        maximizable:false,
         resizeble: false,
         alwaysOnTop:true,
         center:true
