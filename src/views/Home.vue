@@ -1,13 +1,17 @@
 <template>
-  <Solar />
+  <component :is="isAdults ? Adult :Solar" />
   <sign :show="show" />
 </template>
 
 <script lang="ts" setup>
 import Solar from "@cp/solar.vue";
+import Adult from "@cp/adult.vue";
 import sign from "@cp/sign.vue";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { useStore } from "vuex";
+const store = useStore();
 const show = ref(false);
+const isAdult = ref(true);
 // 目前只做了每次打开就幸运签
 const isShow = (num:number) => {
   let _show = window.sessionStorage.getItem("S");
@@ -21,6 +25,10 @@ const isShow = (num:number) => {
     }, 3666+num);
   }
 };
+
+const isAdults = computed(()=>{
+    return store.state.isAdult;
+})
 
 onMounted(() => {
   window.electron.receive('main_show',function(evt:any,args:any){

@@ -1,12 +1,8 @@
 <template>
   <div class="solar_form">
     <div class="solar_hit">
-      <p class="solar_koto">{{ vhitokoto }}</p>
-      <p class="solar_ple">
-        <span>{{ vfrom || "未知" }}</span>
-        <span>——</span>
-        <span>{{ vfrom_who || "未知" }}</span>
-      </p>
+          <img :src="logo" alt="logo" class="solar_logo" align="left">
+         <p class="solar_koto">{{ vhitokoto }}</p>
     </div>
   </div>
   <div
@@ -16,22 +12,10 @@
       backgroundSize: '100% 100%',
     }"
   ></div>
-  <!-- 屏蔽右键菜单 -->
-  <!-- <div class="zoom-flex" v-contextmenu="vmenu">
-    <div
-      class="zoom"
-      :title="iv.text"
-      v-for="(iv, ik) in vmenu"
-      :key="ik"
-      @click.stop="handleItem(iv.id, $event)"
-    >
-      {{ iv.text }}
-    </div>
-  </div> -->
   <div class="zoom_coxt">
     <div class="zoom-move"></div>
     <!-- 菜单按钮快捷键 -->
-    <v-menus @getParentFn="getParentFn" :bgImg="bgImg"/>
+    <v-menus @getParentFn="getAduFn" :bgImg="bgImg"/>
   </div>
   <!-- 数据更新完成提示框 -->
   <div :class="['zoom-tips', { 'zoom-in': isTips }]">壁纸切换成功</div>
@@ -44,28 +28,21 @@ import defaultImgs from "@as/imgs/default.jpg";
 // import { useRouter, useRoute } from "vue-router";
 const bgImg = ref(defaultImgs);
 const vhitokoto = ref("");
-const vfrom = ref("");
-const vfrom_who = ref("");
+const logo = ref("");
 const isTips = ref(false);
 const store = useStore();
-const vmenu = ref([
-  { text: "全屏化", id: 1, iconName: "fa-icon" },
-  { text: "最小化", id: 2, iconName: "fa-icon" },
-  { text: "随机壁纸", id: 3, iconName: "fa-icon" },
-  { text: "下载当前壁纸", id: 4, iconName: "fa-icon" },
-  { text: "关闭应用", id: 5, iconName: "fa-icon" },
-]);
 // const route = useRouter();
 const timer = ref(0);
 defineComponent({
   name: "solar",
 });
 const getBackImg = () => {
-  fetch("https://picsum.photos/1920/1080?random")
-    .then((response) => {
-      const { url } = response;
+  fetch("https://api.uomg.com/api/rand.img1?format=json")
+    .then((response) => response.json())
+    .then((data) => {
+      const { imgurl } = data;
       let img = new Image();
-      img.src = url;
+      img.src = imgurl;
       img.onload = function () {
         bgImg.value = img.src;
       };
@@ -74,32 +51,42 @@ const getBackImg = () => {
         isTips.value = false;
       }, 1500);
     })
-    .then((data) => {
-      // console.log(data);
-    })
     .catch(function (e) {
       console.log("Oops, error");
     });
 };
 
-// 获取每日一言
+// 随机情话输出
 const getSpeech = () => {
-  fetch("https://v1.hitokoto.cn")
+  fetch("https://api.uomg.com/api/rand.qinghua?format=json")
     .then((response) => response.json())
     .then((data) => {
-      const { hitokoto, from, from_who } = data;
-      vhitokoto.value = hitokoto;
-      vfrom.value = from;
-      vfrom_who.value = from_who;
-      store.commit("SET_VOTO", data);
+      const { content } = data;
+      vhitokoto.value = content;
     })
     .catch(console.error);
 };
-
+// 随机头像输出
+const getLogo = ()=>{
+    const cate = ['男','女','动漫男','动漫女'];
+    const type = cate[Math.floor(Math.random()*cate.length)]
+    fetch(`https://api.uomg.com/api/rand.avatar?sort=${type}&format=json`)
+    .then((response) => response.json())
+    .then((data) => {
+        const {imgurl} = data;
+        logo.value = imgurl;
+    })
+}
+const promises = [getSpeech(),getLogo(),getBackImg()]
 const getParentFn = () => {
-  getBackImg();
-  getSpeech();
+  Promise.allSettled(promises);
 };
+
+const getAduFn = ()=>{
+    getSpeech();
+    getLogo();
+    getBackImg();
+}
 
 // 点击事件
 const handleItem = (ik: Number, $event: any) => {
@@ -108,8 +95,7 @@ const handleItem = (ik: Number, $event: any) => {
   } else if (ik === 2) {
     window.electron.send("minBox");
   } else if (ik === 3) {
-    getBackImg();
-    getSpeech();
+    Promise.allSettled(promises);
   } else if (ik === 4) {
     window.electron.send("downloadImg", bgImg.value);
   } else {
@@ -250,9 +236,14 @@ const vContextmenu = {
 .solar_koto {
   margin-bottom: 5px;
   font-size: 20px;
+  line-height:24px;
 }
-.solar_ple {
-  text-align: right;
+.solar_logo{
+    display: inline-block;
+    width:46px;
+    height:46px;
+    border-radius: 50%;
+    margin-right:6px;
 }
 
 .zoom-tips {
