@@ -17,6 +17,14 @@ const router = createRouter({
             meta:{
                 title:"泰然如者"
             },
+        },
+        {
+            path:'/pic',
+            name:'pic',
+            component:()=>import('../views/pic.vue'),
+            meta:{
+                title:"修身养性"
+            },
         }
     ]
 })

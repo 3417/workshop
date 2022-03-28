@@ -17,4 +17,5 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 - [x] 每日签到功能
 - [x] 快捷方式集成到页面按钮上
 - [x] 新增情怀版本
+- [ ] 新增图片浏览界面
 
