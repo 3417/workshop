@@ -44,7 +44,7 @@ const vbars = ref([
   { text: "随机壁纸", id: 3 },
   { text: "下载当前壁纸", id: 4 },
   { text: "情怀版本", id: 6 },
-  { text: "浏览图片", id: 7 },
+  { text: "MZ图片", id: 7 },
 ]);
 store.state.isAdult ? vbars.value.splice(2,1,{ text: "平淡版本", id: 6 }) : vbars.value.splice(2,1,{ text: "情怀版本", id: 6 })
 const emit = defineEmits(["getParentFn"]);
