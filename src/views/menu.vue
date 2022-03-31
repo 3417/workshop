@@ -43,8 +43,7 @@ const vmenu = ref([
 const vbars = ref([
   { text: "随机壁纸", id: 3 },
   { text: "下载当前壁纸", id: 4 },
-  { text: "情怀版本", id: 6 },
-  { text: "MZ图片", id: 7 },
+  { text: "情怀版本", id: 6 }
 ]);
 store.state.isAdult ? vbars.value.splice(2,1,{ text: "平淡版本", id: 6 }) : vbars.value.splice(2,1,{ text: "情怀版本", id: 6 })
 const emit = defineEmits(["getParentFn"]);
@@ -100,8 +99,6 @@ const handleItem = (ik: Number) => {
   } else if(ik === 6){
     const hasAdu = store.state.isAdult;
     hasAdu ? store.commit('SET_ADULT',false) : store.commit('SET_ADULT',true)
-  } else if(ik === 7){
-    router.push({name:"pic"})
   }
 };
 onMounted(()=>{
@@ -148,7 +145,7 @@ onMounted(()=>{
       .menu_child__items {
         padding: 10px 12px;
         &:hover {
-          background-color: #041dd7;
+          background-color: #2c43f3;
         }
       }
     }
