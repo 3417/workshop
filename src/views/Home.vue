@@ -8,7 +8,7 @@ import Solar from "@cp/solar.vue";
 import Adult from "@cp/adult.vue";
 import sign from "@cp/sign.vue";
 import { computed, onMounted, ref } from "vue";
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 const store = useStore();
 const show = ref(false);
 const isAdult = ref(true);
@@ -27,7 +27,7 @@ const isShow = (num:number) => {
 };
 
 const isAdults = computed(()=>{
-    return store.state.isAdult;
+    return store.isAdult;
 })
 
 onMounted(() => {

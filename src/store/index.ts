@@ -1,21 +1,20 @@
 
-import { createStore } from 'vuex';
-const store = createStore({
-    state() {
-        return {
+import { defineStore  } from 'pinia';
+
+export const useStore = defineStore('main',{
+    state:()=>{
+        return{
             voto:{},
             isAdult:false,
         }
     },
-    mutations: {
-        SET_VOTO(state:any,data) {
-            state.voto = data;
+    getters:{},
+    actions:{
+        SET_VOTO(data:any) {
+            this.voto = data;
         },
-        SET_ADULT(state:any,data){
-            state.isAdult = data;
+        SET_ADULT(data:boolean){
+            this.isAdult = data;
         }
     }
 })
-
-
-export default store;

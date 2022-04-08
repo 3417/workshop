@@ -31,14 +31,14 @@
 </template>
 <script lang="ts" setup>
 import { ref, computed } from "vue";
-import { useStore } from "vuex";
+import {useStore} from '@/store';
 const deg = ref("");
 const signImg = ref("");
 const botImg = ref("");
 const month = ref("");
 const day = ref("");
 const store = useStore();
-const covto = computed(() => store.state.voto);
+const covto = computed(() => store.voto);
 function randomHexColor(): string {
   //随机生成十六进制颜色
   return (

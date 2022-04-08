@@ -16,3 +16,6 @@ interface ImportMetaEnv{
 interface Window{
   electron:any
 }
+
+
+declare module '@/*'

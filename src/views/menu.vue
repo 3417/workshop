@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import {useStore} from 'vuex';
+import {useStore} from '@/store';
 import {useRouter} from 'vue-router';
 const iconSVG = {
   menu: `<svg t="1646720433535" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2757" width="20" height="20"><path d="M384 480H192c-52.8 0-96-43.2-96-96V192c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM192 160c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V192c0-17.6-14.4-32-32-32H192zM832 480H640c-52.8 0-96-43.2-96-96V192c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM640 160c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V192c0-17.6-14.4-32-32-32H640zM384 928H192c-52.8 0-96-43.2-96-96V640c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM192 608c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V640c0-17.6-14.4-32-32-32H192zM832 928H640c-52.8 0-96-43.2-96-96V640c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM640 608c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V640c0-17.6-14.4-32-32-32H640z" p-id="2758" fill="#ffffff"></path></svg>`,
@@ -32,7 +32,7 @@ const iconSVG = {
   max: `<svg t="1646720549797" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4356" width="20" height="20"><path d="M917.268 132.531H106.732c-38.99 0-70.892 31.898-70.892 70.892v612.034c0 38.99 31.903 70.892 70.892 70.892h810.536c38.99 0 70.892-31.903 70.892-70.892V203.423c0-38.994-31.903-70.892-70.892-70.892z m12.335 689.813H93.809V195.948h835.788v626.396z" fill="#ffffff" p-id="4357"></path></svg>`,
   restore: `<svg t="1646720608178" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6074" width="20" height="20"><path d="M192 64l0 192L0 256l0 704 832 0 0-192 192 0L1024 64 192 64zM768 896 64 896 64 320l704 0L768 896zM960 704l-128 0L832 256 256 256 256 128l704 0L960 704z" p-id="6075" fill="#ffffff"></path></svg>`,
 };
-const store:any = useStore();
+const store = useStore();
 const router = useRouter();
 const vmenu = ref([
   { text: "最小化", id: 2, actName: "min" },
@@ -45,7 +45,7 @@ const vbars = ref([
   { text: "下载当前壁纸", id: 4 },
   { text: "情怀版本", id: 6 }
 ]);
-store.state.isAdult ? vbars.value.splice(2,1,{ text: "平淡版本", id: 6 }) : vbars.value.splice(2,1,{ text: "情怀版本", id: 6 })
+store.isAdult ? vbars.value.splice(2,1,{ text: "平淡版本", id: 6 }) : vbars.value.splice(2,1,{ text: "情怀版本", id: 6 })
 const emit = defineEmits(["getParentFn"]);
 const props = defineProps({
   bgImg: { type: String, default: "" },
@@ -97,8 +97,8 @@ const handleItem = (ik: Number) => {
   } else if (ik === 5) {
     window.electron.send("close");
   } else if(ik === 6){
-    const hasAdu = store.state.isAdult;
-    hasAdu ? store.commit('SET_ADULT',false) : store.commit('SET_ADULT',true)
+    const hasAdu = store.isAdult;
+    hasAdu ? store.SET_ADULT(false) : store.SET_ADULT(true)
   }
 };
 onMounted(()=>{
