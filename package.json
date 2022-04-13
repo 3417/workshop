@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "workapp",
   "private": true,
   "version": "0.0.5",
   "main": "electron/main.ts",
@@ -16,8 +16,7 @@
     "pinia": "^2.0.13",
     "sass": "^1.49.7",
     "vue": "^3.2.25",
-    "vue-router": "4",
-    "vuex": "^4.0.2"
+    "vue-router": "4"
   },
   "devDependencies": {
     "@types/node": "^17.0.18",
@@ -32,7 +31,7 @@
   },
   "build": {
     "appId": "com.3417.github.io",
-    "productName": "relaxed",
+    "productName": "workbench",
     "copyright": "Copyright © 2022 Jone",
     "win": {
       "target": [
