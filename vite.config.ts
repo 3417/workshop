@@ -27,6 +27,20 @@ export default ({ mode }) => {
         scss: {
           additionalData: `@import "./src/assets/style/common.scss";`
         }
+      },
+      postcss:{
+        plugins:[
+          {
+            postcssPlugin:'internal:charst-removal',
+            AtRule:{
+              charset:(atRule)=>{
+                if(atRule.name === 'charset'){
+                  atRule.remove();
+                }
+              }
+            }
+          }
+        ]
       }
     },
     build: {
