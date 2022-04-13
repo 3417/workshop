@@ -4,9 +4,17 @@
 }
 
 html,
-body {
+body,
+#app {
     overflow: hidden;
+    height: 100%;
 }
+
+ul,dl,li,dt {
+    list-style: none;
+}
+
+
 
 ::-webkit-scrollbar {
     width: 6px;
@@ -36,4 +44,19 @@ body {
 ::-webkit-scrollbar-thumb:active {
     background-color: rgb(46, 86, 159);
     cursor: pointer;
+}
+
+.one_ellipsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.two_ellipsis{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    -webkit-line-clamp:2;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
