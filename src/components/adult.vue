@@ -22,7 +22,7 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, onBeforeUnmount, defineComponent } from "vue";
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 import vMenus from "@/views/menu.vue";
 import defaultImgs from "@as/imgs/default.jpg";
 // import { useRouter, useRoute } from "vue-router";

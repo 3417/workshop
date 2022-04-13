@@ -1,11 +1,11 @@
 import {createRouter,createWebHashHistory,createWebHistory} from 'vue-router';
-import Home from '../views/Home.vue';
+import Layout from '../views/Layout.vue';
 const router = createRouter({
     history:createWebHashHistory(),
     routes:[
         {
             path:'/',
-            component:Home,
+            component:Layout,
             meta:{
                 title:"首页"
             }

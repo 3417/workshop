@@ -12,6 +12,7 @@
     "e:build": "set NODE_ENV=pro && vite build && electron-builder"
   },
   "dependencies": {
+    "@varlet/ui": "^1.27.2",
     "esbuild-windows-64": "^0.14.21",
     "pinia": "^2.0.13",
     "sass": "^1.49.7",
