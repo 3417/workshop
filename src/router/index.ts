@@ -19,6 +19,14 @@ const router = createRouter({
             }
         },
         {
+            path:'/sex18',
+            name:'sex18',
+            component:()=>import('../views/Sex.vue'),
+            meta:{
+                title:"18X导航"
+            }
+        },
+        {
             path:'/solar',
             name:'solar',
             component:()=>import('../components/solar.vue'),
