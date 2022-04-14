@@ -18,9 +18,9 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 - [x] 快捷方式集成到页面按钮上
 - [x] 新增情怀版本
 - [x] 移除vuex状态管理机
-- [ ] 增加自定义导航页面，优化主页显示
-- [ ] 添加Material风格的Varlet框架
-- [ ] 添加Pinia状态机
+- [x] 增加自定义导航页面，优化主页显示
+- [x] 添加Material风格的Varlet框架
+- [x] 添加Pinia状态机
 - [ ] 添加Mock定义假数据
 
 

@@ -24,25 +24,29 @@
         </template>
       </var-input>
     </section>
-    <section class="lay_scroll">
+    <section class="lay_scroll" v-for="(ic, ij) in navJson" :key="ij">
       <section class="lay_category">
-        <p class="lay__icon">i</p>
-        <p class="lay__text">学习资源</p>
+        <p class="lay__icon">icon</p>
+        <p class="lay__text">{{ ic.category_CN }}</p>
       </section>
       <section>
         <var-row :gutter="20">
-          <var-col class="lay_col" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(iv, ik) in list" :key="ik">
-            <div class="lay_item">
-              <div class="lay__hd">
-                <div class="lay__logo">
-                  <var-image width="40px" height="40px" fit="cover" radius="50%" :src="iv.logo" />
+          <var-col class="lay_col" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(iv, ik) in ic.item_children"
+            :key="ik">
+            <a :href="iv.a_href" target="_blank">
+              <div class="lay_item">
+                <div class="lay__hd">
+                  <div class="lay__logo">
+                    <!-- <var-image width="40px" height="40px" fit="cover" radius="50%" :src="iv.img_src" /> -->
+                    <var-image width="40px" height="40px" fit="cover" radius="50%" src="https://varlet.gitee.io/varlet-ui/cat.jpg" />
+                  </div>
+                  <div class="lay__title one_ellipsis">{{ iv.child_name }}</div>
                 </div>
-                <div class="lay__title one_ellipsis">{{ iv.title }}</div>
+                <div class="lay_bd two_ellipsis">
+                  {{ iv.child_desc }}
+                </div>
               </div>
-              <div class="lay_bd two_ellipsis">
-                {{ iv.desc }}
-              </div>
-            </div>
+            </a>
           </var-col>
         </var-row>
       </section>
@@ -51,40 +55,15 @@
   <!-- 设置切换主题颜色色值 -->
   <section class="lay_side">
     <var-space>
-      <var-back-top :duration="300" />
-      <var-button color="linear-gradient(to right, #69dbaa, #3a7afe)" text-color="#fff" round>
-        <var-icon name="plus" size="20px" />
-      </var-button>
+      <var-back-top :duration="300" target=".lay_container"/>
     </var-space>
   </section>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import navJson from '../assets/db.json';
 const value = ref("");
-const list = ref([
-  {
-    title: "前端笔记本",
-    logo: 'https://varlet.gitee.io/varlet-ui/cat.jpg',
-    desc: '个人前端学习笔记本个人前端学习笔记本个人前端学习笔记本个人前端学习笔记本个人前端学习笔记本'
-  },
-  {
-    title: "前端笔记本",
-    logo: 'https://varlet.gitee.io/varlet-ui/cat.jpg',
-    desc: '个人前端学习笔记本'
-  },
-  {
-    title: "前端笔记本",
-    logo: 'https://varlet.gitee.io/varlet-ui/cat.jpg',
-    desc: '个人前端学习笔记本'
-  },
-  {
-    title: "前端笔记本",
-    logo: 'https://varlet.gitee.io/varlet-ui/cat.jpg',
-    desc: '个人前端学习笔记本'
-  }
-])
-
 const elist = ref([
   {
     icon: "",
@@ -123,11 +102,9 @@ const elist = ref([
 
 <style lang="scss" scoped>
 .lay_container {
-  // height: 100%;
-  height: 5000px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  height: 100%;
   background: #f3f6f8;
+  overflow: auto;
 
   .lay_search {
     .lay_group {
@@ -143,11 +120,13 @@ const elist = ref([
         transition: all 0.3s;
         z-index: 999;
         display: none;
+
         .lay_title {
           font: 400 14px '黑体';
           color: #333;
           margin-bottom: 12px;
         }
+
         .lay_content {
           .lay_li {
             background-color: #f9f9f9;
@@ -189,6 +168,7 @@ const elist = ref([
 
     .lay_col {
       overflow: hidden;
+
       .lay_item {
         border-radius: 6px;
         background: #fff;
@@ -233,7 +213,7 @@ const elist = ref([
   }
 }
 
-.lay_side{
+.lay_side {
   position: fixed;
   right: 20px;
   bottom: 60px;
