@@ -1934,7 +1934,7 @@
             },
             {
                 "child_name": "Vue.js devtools",
-                "img_src": "./nav/Vue.js devtools.png",
+                "img_src": "./nav/Vuejsdevtools.png",
                 "a_href": "https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd?hl=zh-CN",
                 "child_desc": "基于google chrome浏览器的一款调试vue.js应用的开发者浏览器扩展"
             },

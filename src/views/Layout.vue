@@ -1,33 +1,33 @@
 <template>
   <main class="lay_container">
     <section class="lay_search">
-      <var-input placeholder="请输入搜索内容,按回车 / Enter 搜索" clearable v-model="value">
-        <template #prepend-icon>
-          <section class="lay_group">
-            <section class="lay__pr">
-              <var-icon name="heart-half-full" title="点击切换搜索引擎" />
-            </section>
-            <section class="lay-engine">
-              <div class="lay_title">选择你的默认搜索引擎</div>
-              <div class="lay_content">
-                <var-row :gutter="10">
-                  <var-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(item, key) in elist" :key="key">
-                    <div class="lay_li">
-                      <i :class="item.icon"></i>
-                      <span>{{ item.name }}</span>
-                    </div>
-                  </var-col>
-                </var-row>
-              </div>
-            </section>
-          </section>
-        </template>
-      </var-input>
+      <!-- 搜索引擎 -->
+      <!-- <section class="lay-engine">
+          <div class="lay_content">
+            <var-row :gutter="10">
+              <var-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(item, key) in elist" :key="key">
+                <div class="lay_li">
+                  <i :class="item.icon"></i>
+                  <span>{{ item.name }}</span>
+                </div>
+              </var-col>
+            </var-row>
+          </div>
+        </section> -->
+      <!-- 搜索框 -->
+      <section class="lay-ips">
+        <section class="lay_lf">
+          icon
+        </section>
+        <section class="lay_rt">
+          <input type="text" placeholder="请输入搜索的内容,按确定/Enter即可搜索" v-model="value">
+        </section>
+      </section>
     </section>
     <section class="lay_scroll" v-for="(ic, ij) in navJson" :key="ij">
       <section class="lay_category">
         <p class="lay__icon">
-          <i :class="['iconfont',ic.category_icon]"></i>
+          <i :class="['iconfont', ic.category_icon]"></i>
         </p>
         <p class="lay__text">{{ ic.category_CN }}</p>
       </section>
@@ -43,7 +43,7 @@
                   </div>
                   <div class="lay__title one_ellipsis">{{ iv.child_name }}</div>
                 </div>
-                <div class="lay_bd two_ellipsis">
+                <div class="lay_bd two_ellipsis" :title="iv.child_desc">
                   {{ iv.child_desc }}
                 </div>
               </div>
@@ -56,7 +56,7 @@
   <!-- 设置切换主题颜色色值 -->
   <section class="lay_side">
     <var-space>
-      <var-back-top :duration="300" target=".lay_container"/>
+      <var-back-top :duration="300" target=".lay_container" />
     </var-space>
   </section>
 </template>
@@ -100,12 +100,13 @@ const elist = ref([
   }
 ])
 
-const getImgUrl = (url:string)=>{
+const getImgUrl = (url: string) => {
   let reg = /[^\./\s]+(?:\/[^\/\s]+)+/
   let _match = reg.exec(url)
   let imgUrl = _match ? _match[0] : ''
   return new URL(`../assets/${imgUrl}`, import.meta.url).href;
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -115,38 +116,62 @@ const getImgUrl = (url:string)=>{
   overflow: auto;
 
   .lay_search {
-    .lay_group {
-      .lay-engine {
+    .lay-engine {
+      position: absolute;
+      top: 52px;
+      left: 0;
+      width: 100%;
+      background: #FFF;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0px 5px 20px 0px #d8d7d7;
+      transition: all 0.3s;
+      z-index: 999;
+
+      .lay_title {
+        font: 400 14px '黑体';
+        color: #333;
+        margin-bottom: 12px;
+      }
+
+      .lay_content {
+        .lay_li {
+          background-color: #f9f9f9;
+          line-height: 30px;
+          font-size: 14px;
+          padding: 5px 10px 5px 10px;
+          margin-bottom: 10px;
+          color: #999;
+          cursor: pointer;
+          border-radius: 2px;
+        }
+      }
+    }
+    .lay-ips{
+      position: relative;
+      .lay_lf{
         position: absolute;
-        top: 52px;
         left: 0;
+        width: 60px;
+        top: 50%;
+        transform: translateY(-50%);
+        padding-left: 8px;
+        box-sizing: border-box;
+      }
+      .lay_rt{
+        box-shadow: 0 1px 3px #ddd;
+        padding:0 12px 0 60px;
+        background-color: #fff;
+        height: 45px;
+        line-height: 45px;
+        border-radius: 2px;
+      }
+      input{
+        font:500 16px '微软雅黑';
+        border: none;
+        outline: none;
         width: 100%;
-        background: #FFF;
-        padding: 15px;
-        border-radius: 5px;
-        box-shadow: 0px 5px 20px 0px #d8d7d7;
-        transition: all 0.3s;
-        z-index: 999;
-        display: none;
-
-        .lay_title {
-          font: 400 14px '黑体';
-          color: #333;
-          margin-bottom: 12px;
-        }
-
-        .lay_content {
-          .lay_li {
-            background-color: #f9f9f9;
-            line-height: 30px;
-            font-size: 14px;
-            padding: 5px 10px 5px 10px;
-            margin-bottom: 10px;
-            color: #999;
-            cursor: pointer;
-            border-radius: 2px;
-          }
-        }
+        height: inherit;
       }
     }
   }
