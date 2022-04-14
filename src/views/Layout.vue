@@ -57,9 +57,7 @@
   </main>
   <!-- 设置切换主题颜色色值 -->
   <section class="lay_side">
-    <var-space>
-      <var-back-top :duration="300" target=".lay_container" />
-    </var-space>
+    <var-back-top :duration="300" target=".lay_container" />
   </section>
 
   <!-- 右键菜单 -->
@@ -215,9 +213,9 @@ const onSearch = () => {
 
 <style lang="scss" scoped>
 .lay_container {
-  height: 100%;
   background: #f3f6f8;
   overflow: auto;
+  height: 100%;
 
   .lay_search {
     position: relative;
