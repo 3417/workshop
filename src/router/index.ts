@@ -11,6 +11,14 @@ const router = createRouter({
             }
         },
         {
+            path:'/picture',
+            name:'picture',
+            component:()=>import('../views/Home.vue'),
+            meta:{
+                title:"放松一下"
+            }
+        },
+        {
             path:'/solar',
             name:'solar',
             component:()=>import('../components/solar.vue'),

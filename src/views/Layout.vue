@@ -1,10 +1,11 @@
 <template>
-  <main class="lay_container" @click.prevent>
+  <section class="zoom-move"></section>
+  <main class="lay_container">
     <section class="lay_search">
       <!-- 搜索框 -->
       <section class="lay-ips">
         <section class="lay_lf" @click="show = !show">
-          <i :class="['iconfont', actIconName]" :style="{color:actIconColor}"></i>
+          <i :class="['iconfont', actJson.name]" :style="{ color: actJson.color }"></i>
         </section>
         <section class="lay_rt">
           <input type="text" placeholder="请输入搜索的内容,按确定/Enter即可搜索" v-model="search" @keydown.enter="onSearch">
@@ -14,9 +15,10 @@
       <section class="lay-engine" v-if="show">
         <div class="lay_content">
           <var-row :gutter="10">
-            <var-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(item, key) in elist" :key="key" @click="onItem(item)">
+            <var-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(item, key) in elist" :key="key"
+              @click="onItem(item)">
               <div class="lay_li">
-                <i :class="['iconfont', item.iconName]" :style="{color:item.color}"></i>
+                <i :class="['iconfont', item.iconName]" :style="{ color: item.color }"></i>
                 <span>{{ item.name }}</span>
               </div>
             </var-col>
@@ -59,66 +61,136 @@
       <var-back-top :duration="300" target=".lay_container" />
     </var-space>
   </section>
+
+  <!-- 右键菜单 -->
+  <div class="zoom-flex" v-contextmenu="vmenu">
+    <div class="zoom" :title="iv.text" v-for="(iv, ik) in vmenu" :key="ik" @click.stop="handleItem(iv.id, $event)">
+      {{ iv.text }}
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { useRouter } from 'vue-router';
+import { reactive, ref } from "vue";
 import navJson from '../assets/db.json';
 const search = ref("");
-const actIconName = ref("icon-baidu");
-const actIconColor = ref("#2319dc");
-const actIconUrl = ref("https://www.baidu.com/s?wd=");
+const actJson = reactive({
+  name: "icon-baidu",
+  color: "#2319dc",
+  url: "https://www.baidu.com/s?wd="
+})
 const show = ref(false);
+const router = useRouter();
 const elist = ref([
   {
     iconName: "icon-baidu",
-    color:'#2319dc',
+    color: '#2319dc',
     name: "百度",
     url: 'https://www.baidu.com/s?wd='
   },
   {
     iconName: "icon-gugegoogle114",
-    color:'#4c8bf5',
+    color: '#4c8bf5',
     name: "谷歌",
     url: 'https://www.google.com/search?q='
   },
   {
     iconName: "icon-biying",
-    color:'#0a8583',
+    color: '#0a8583',
     name: "必应",
     url: 'https://cn.bing.com/search?q='
   },
   {
     iconName: "icon-github2",
-    color:'#24292e',
+    color: '#24292e',
     name: "GitHub",
     url: 'https://github.com/search?utf8=✓&q='
   },
   {
     iconName: "icon-sousuo",
-    color:'#f8b616',
+    color: '#f8b616',
     name: "好搜",
     url: 'https://www.so.com/s?q='
   },
   {
     iconName: "icon-sougou",
-    color:'#fe620d',
+    color: '#fe620d',
     name: "搜狗",
     url: 'https://www.sogou.com/web?query='
   },
   {
     iconName: "icon-bilibili-s",
-    color:'#f45a8d',
+    color: '#f45a8d',
     name: "B站",
     url: 'http://search.bilibili.com/all?keyword='
   },
   {
     iconName: "icon-icon-zhihu",
-    color:'#0078d7',
+    color: '#0078d7',
     name: "知乎",
     url: 'https://www.zhihu.com/search?type=content&q='
   }
 ])
+const vmenu = ref([
+  { text: "全屏化", id: 1 },
+  { text: "最小化", id: 2 },
+  { text: "成人导航(18X)", id: 3 },
+  { text: "美图模式", id: 4 },
+  { text: "关闭应用", id: 5 },
+]);
+
+const vContextmenu = {
+  created() { },
+  beforeMount() { },
+  mounted(el: any, binding: any, vnode: any) {
+    function showMenu(e: any) {
+      const { clientX, clientY, offsetX, offsetY } = e;
+      const dWidth = document.body.clientWidth;
+      const dHeight = document.body.clientHeight;
+      const boxWidth = el.clientWidth;
+      const boxHeight = el.clientHeight;
+      e.preventDefault();
+      el.style.opacity = 1; //右键显示
+      el.style.zIndex = 1000;
+      if (dWidth - offsetX < boxWidth) {
+        el.style.left = offsetX - boxWidth + "px";
+      } else {
+        el.style.left = clientX + "px";
+      }
+      if (dHeight - offsetY < boxHeight) {
+        el.style.top = offsetY - boxHeight + "px";
+      } else {
+        el.style.top = clientY + "px";
+      }
+    }
+    function closeMenu(e: any) {
+      el.style.opacity = 0;
+      el.style.zIndex = -1000;
+    }
+    addEventListener("click", (e) => closeMenu(e));
+    document.addEventListener("contextmenu", showMenu);
+  },
+  beforeUnmount() { },
+  unmounted() { },
+};
+
+const handleItem = (ik: Number, $event: any) => {
+  if (ik === 1) {
+    window.electron.send("maxBox");
+  } else if (ik === 2) {
+    window.electron.send("minBox");
+  } else if (ik === 3) {
+    alert("正在加紧完善中")
+  } else if (ik === 4) {
+    router.push({ name: 'picture' });
+  } else {
+    window.electron.send("close");
+  }
+  const $events = $event.currentTarget.parentElement;
+  $events.style.opacity = 0;
+  $events.style.zIndex = -1000;
+};
 
 const getImgUrl = (url: string) => {
   let reg = /[^\./\s]+(?:\/[^\/\s]+)+/
@@ -127,15 +199,15 @@ const getImgUrl = (url: string) => {
   return new URL(`../assets/${imgUrl}`, import.meta.url).href;
 }
 
-const onItem = (item:any)=>{
-  actIconColor.value = item.color;
-  actIconName.value = item.iconName;
-  actIconUrl.value = item.url;
+const onItem = (item: any) => {
+  actJson.color = item.color;
+  actJson.name = item.iconName;
+  actJson.url = item.url;
   show.value = false;
 }
 
-const onSearch = ()=>{
-  window.open(actIconUrl.value+search.value,'_blank');
+const onSearch = () => {
+  window.open(actJson.url + search.value, '_blank');
   search.value = '';
 }
 
@@ -150,6 +222,7 @@ const onSearch = ()=>{
   .lay_search {
     position: relative;
     padding: 0 12px;
+
     .lay-engine {
       position: absolute;
       top: 52px;
@@ -162,6 +235,7 @@ const onSearch = ()=>{
       transition: all 0.3s;
       z-index: 999;
       box-sizing: border-box;
+
       .lay_content {
         .lay_li {
           background-color: #f9f9f9;
@@ -172,9 +246,10 @@ const onSearch = ()=>{
           color: #999;
           cursor: pointer;
           border-radius: 2px;
-          i{
+
+          i {
             margin-right: 6px;
-            font-size:18px;
+            font-size: 18px;
           }
         }
       }
@@ -182,6 +257,7 @@ const onSearch = ()=>{
 
     .lay-ips {
       position: relative;
+
       .lay_lf {
         position: absolute;
         left: 0;
@@ -191,11 +267,13 @@ const onSearch = ()=>{
         padding-left: 8px;
         box-sizing: border-box;
         cursor: pointer;
-        i{
+
+        i {
           font-size: 22px;
         }
-        &::after{
-          content:"";
+
+        &::after {
+          content: "";
           position: absolute;
           right: 0;
           bottom: 3px;
@@ -234,6 +312,10 @@ const onSearch = ()=>{
 
     &:nth-child(1) {
       margin-top: 35px;
+    }
+
+    &:last-child {
+      margin-bottom: 40px;
     }
 
     .lay_category {
@@ -298,6 +380,48 @@ const onSearch = ()=>{
   position: fixed;
   right: 20px;
   bottom: 60px;
+}
+
+.zoom-move {
+  background-color: #f3f6f8;
+  height: 20px;
+  -webkit-app-region: drag;
+}
+
+.zoom-flex {
+  padding: 7px 0px;
+  pointer-events: all;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  user-select: none;
+  box-shadow: rgb(0 0 0 / 12%) 0px 4px 19px 0px;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: opacity 0.3s ease 0s;
+  opacity: 0;
+
+  .zoom {
+    margin: 1px 0px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1.4;
+    padding: 8px 20px;
+    color: rgb(51, 51, 51);
+    white-space: nowrap;
+    transition: none 0s ease 0s;
+    background-color: rgb(255, 255, 255);
+    font-family: "Ma Shan Zheng", cursive;
+
+    &:hover {
+      color: #fefefe;
+      background-color: #7d89f0;
+    }
+  }
 }
 
 // 媒体查询
