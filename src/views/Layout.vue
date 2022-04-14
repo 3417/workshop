@@ -3,21 +3,23 @@
     <section class="lay_search">
       <var-input placeholder="请输入搜索内容,按回车 / Enter 搜索" clearable v-model="value">
         <template #prepend-icon>
-          <section class="lay__pr">
-            <var-icon name="heart-half-full" />
-          </section>
-          <section class="lay-engine">
-            <div class="lay_title">选择你的默认搜索引擎</div>
-            <div class="lay_content">
-              <var-row :gutter="10">
-                <var-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(item, key) in elist" :key="key">
-                  <div class="lay_li">
-                    <i :class="item.icon"></i>
-                    <span>{{ item.name }}</span>
-                  </div>
-                </var-col>
-              </var-row>
-            </div>
+          <section class="lay_group">
+            <section class="lay__pr">
+              <var-icon name="heart-half-full" title="点击切换搜索引擎" />
+            </section>
+            <section class="lay-engine">
+              <div class="lay_title">选择你的默认搜索引擎</div>
+              <div class="lay_content">
+                <var-row :gutter="10">
+                  <var-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(item, key) in elist" :key="key">
+                    <div class="lay_li">
+                      <i :class="item.icon"></i>
+                      <span>{{ item.name }}</span>
+                    </div>
+                  </var-col>
+                </var-row>
+              </div>
+            </section>
           </section>
         </template>
       </var-input>
@@ -46,6 +48,15 @@
       </section>
     </section>
   </main>
+  <!-- 设置切换主题颜色色值 -->
+  <section class="lay_side">
+    <var-space>
+      <var-back-top :duration="300" />
+      <var-button color="linear-gradient(to right, #69dbaa, #3a7afe)" text-color="#fff" round>
+        <var-icon name="plus" size="20px" />
+      </var-button>
+    </var-space>
+  </section>
 </template>
 
 <script lang="ts" setup>
@@ -112,45 +123,42 @@ const elist = ref([
 
 <style lang="scss" scoped>
 .lay_container {
-  height: 100%;
+  // height: 100%;
+  height: 5000px;
   overflow-y: auto;
   overflow-x: hidden;
   background: #f3f6f8;
 
   .lay_search {
-    .lay__pr:hover+.lay-engine {
-      display: block;
-    }
-
-    .lay-engine {
-      position: absolute;
-      top: 52px;
-      left: 0;
-      width: 100%;
-      background: #FFF;
-      padding: 15px;
-      border-radius: 5px;
-      box-shadow: 0px 5px 20px 0px #d8d7d7;
-      transition: all 0.3s;
-      z-index: 999;
-      display: none;
-
-      .lay_title {
-        font: 400 14px '黑体';
-        color: #333;
-        margin-bottom: 12px;
-      }
-
-      .lay_content {
-        .lay_li {
-          background-color: #f9f9f9;
-          line-height: 30px;
-          font-size: 14px;
-          padding: 5px 10px 5px 10px;
-          margin-bottom: 10px;
-          color: #999;
-          cursor: pointer;
-          border-radius: 2px;
+    .lay_group {
+      .lay-engine {
+        position: absolute;
+        top: 52px;
+        left: 0;
+        width: 100%;
+        background: #FFF;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0px 5px 20px 0px #d8d7d7;
+        transition: all 0.3s;
+        z-index: 999;
+        display: none;
+        .lay_title {
+          font: 400 14px '黑体';
+          color: #333;
+          margin-bottom: 12px;
+        }
+        .lay_content {
+          .lay_li {
+            background-color: #f9f9f9;
+            line-height: 30px;
+            font-size: 14px;
+            padding: 5px 10px 5px 10px;
+            margin-bottom: 10px;
+            color: #999;
+            cursor: pointer;
+            border-radius: 2px;
+          }
         }
       }
     }
@@ -181,7 +189,6 @@ const elist = ref([
 
     .lay_col {
       overflow: hidden;
-
       .lay_item {
         border-radius: 6px;
         background: #fff;
@@ -226,6 +233,13 @@ const elist = ref([
   }
 }
 
+.lay_side{
+  position: fixed;
+  right: 20px;
+  bottom: 60px;
+}
+
+// 媒体查询
 @media (min-width: 992px) {
   .lay_search {
     width: 650px;
