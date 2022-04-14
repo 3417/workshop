@@ -1,9 +1,9 @@
 <template>
-  <main class="lay_container">
+  <main class="lay_container" @click.prevent>
     <section class="lay_search">
       <!-- 搜索框 -->
       <section class="lay-ips">
-        <section class="lay_lf" @click="show = true">
+        <section class="lay_lf" @click="show = !show">
           <i :class="['iconfont', actIconName]" :style="{color:actIconColor}"></i>
         </section>
         <section class="lay_rt">
@@ -149,6 +149,7 @@ const onSearch = ()=>{
 
   .lay_search {
     position: relative;
+    padding: 0 12px;
     .lay-engine {
       position: absolute;
       top: 52px;
@@ -181,7 +182,6 @@ const onSearch = ()=>{
 
     .lay-ips {
       position: relative;
-
       .lay_lf {
         position: absolute;
         left: 0;
@@ -190,6 +190,7 @@ const onSearch = ()=>{
         transform: translateY(-50%);
         padding-left: 8px;
         box-sizing: border-box;
+        cursor: pointer;
         i{
           font-size: 22px;
         }
@@ -197,7 +198,7 @@ const onSearch = ()=>{
           content:"";
           position: absolute;
           right: 0;
-          bottom: 0;
+          bottom: 3px;
           border: 6px solid transparent;
           border-top-color: #ddd;
         }
@@ -309,7 +310,6 @@ const onSearch = ()=>{
 
 @media (max-width: 992px) {
   .lay_search {
-    width: 100%;
     max-width: 650px;
     margin: 12px auto 35px;
   }
