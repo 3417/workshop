@@ -3,12 +3,7 @@
         "category_CN": "学习资源",
         "category_icon": "icon-xuexi",
         "category_item": "baseLearnItem",
-        "item_children": [{
-                "child_name": "Hulkye's 前端笔记本",
-                "img_src": "./nav/Hulkye.png",
-                "a_href": "https://hulkye.github.io/Docs/",
-                "child_desc": "个人的前端学习笔记本,记录些许"
-            },
+        "item_children": [
             {
                 "child_name": "Mozilla 开发者网络",
                 "img_src": "./nav/mozilla.jpg",

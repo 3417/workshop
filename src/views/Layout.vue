@@ -26,7 +26,9 @@
     </section>
     <section class="lay_scroll" v-for="(ic, ij) in navJson" :key="ij">
       <section class="lay_category">
-        <p class="lay__icon">icon</p>
+        <p class="lay__icon">
+          <i :class="['iconfont',ic.category_icon]"></i>
+        </p>
         <p class="lay__text">{{ ic.category_CN }}</p>
       </section>
       <section>
@@ -37,8 +39,7 @@
               <div class="lay_item">
                 <div class="lay__hd">
                   <div class="lay__logo">
-                    <!-- <var-image width="40px" height="40px" fit="cover" radius="50%" :src="iv.img_src" /> -->
-                    <var-image width="40px" height="40px" fit="cover" radius="50%" src="https://varlet.gitee.io/varlet-ui/cat.jpg" />
+                    <var-image width="40px" height="40px" fit="cover" radius="50%" :src="getImgUrl(iv.img_src)" />
                   </div>
                   <div class="lay__title one_ellipsis">{{ iv.child_name }}</div>
                 </div>
@@ -98,6 +99,13 @@ const elist = ref([
     name: "知乎"
   }
 ])
+
+const getImgUrl = (url:string)=>{
+  let reg = /[^\./\s]+(?:\/[^\/\s]+)+/
+  let _match = reg.exec(url)
+  let imgUrl = _match ? _match[0] : ''
+  return new URL(`../assets/${imgUrl}`, import.meta.url).href;
+}
 </script>
 
 <style lang="scss" scoped>
