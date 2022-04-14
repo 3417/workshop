@@ -43,8 +43,14 @@ export default ({ mode }) => {
         ]
       }
     },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'es2020'
+      }
+    },
     build: {
-      outDir: 'dist'
+      outDir: 'dist',
+      target:'es2020'
     }
   })
 }

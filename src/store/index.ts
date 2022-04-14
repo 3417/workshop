@@ -4,7 +4,12 @@ import { defineStore  } from 'pinia';
 export const useStore = defineStore('main',{
     state:()=>{
         return{
-            voto:{},
+            voto:{
+                type:"",  
+                hitokoto:"",  
+                from:"",  
+                from_who:""
+            },
             isAdult:false,
         }
     },
