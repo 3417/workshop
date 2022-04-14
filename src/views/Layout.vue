@@ -1,27 +1,27 @@
 <template>
   <main class="lay_container">
     <section class="lay_search">
-      <!-- 搜索引擎 -->
-      <!-- <section class="lay-engine">
-          <div class="lay_content">
-            <var-row :gutter="10">
-              <var-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(item, key) in elist" :key="key">
-                <div class="lay_li">
-                  <i :class="item.icon"></i>
-                  <span>{{ item.name }}</span>
-                </div>
-              </var-col>
-            </var-row>
-          </div>
-        </section> -->
       <!-- 搜索框 -->
       <section class="lay-ips">
-        <section class="lay_lf">
-          icon
+        <section class="lay_lf" @click="show = true">
+          <i :class="['iconfont', actIconName]" :style="{color:actIconColor}"></i>
         </section>
         <section class="lay_rt">
-          <input type="text" placeholder="请输入搜索的内容,按确定/Enter即可搜索" v-model="value">
+          <input type="text" placeholder="请输入搜索的内容,按确定/Enter即可搜索" v-model="search" @keydown.enter="onSearch">
         </section>
+      </section>
+      <!-- 搜索引擎 -->
+      <section class="lay-engine" v-if="show">
+        <div class="lay_content">
+          <var-row :gutter="10">
+            <var-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(item, key) in elist" :key="key" @click="onItem(item)">
+              <div class="lay_li">
+                <i :class="['iconfont', item.iconName]" :style="{color:item.color}"></i>
+                <span>{{ item.name }}</span>
+              </div>
+            </var-col>
+          </var-row>
+        </div>
       </section>
     </section>
     <section class="lay_scroll" v-for="(ic, ij) in navJson" :key="ij">
@@ -64,39 +64,59 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import navJson from '../assets/db.json';
-const value = ref("");
+const search = ref("");
+const actIconName = ref("icon-baidu");
+const actIconColor = ref("#2319dc");
+const actIconUrl = ref("https://www.baidu.com/s?wd=");
+const show = ref(false);
 const elist = ref([
   {
-    icon: "",
-    name: "百度"
+    iconName: "icon-baidu",
+    color:'#2319dc',
+    name: "百度",
+    url: 'https://www.baidu.com/s?wd='
   },
   {
-    icon: "",
-    name: "谷歌"
+    iconName: "icon-gugegoogle114",
+    color:'#4c8bf5',
+    name: "谷歌",
+    url: 'https://www.google.com/search?q='
   },
   {
-    icon: "",
-    name: "必应"
+    iconName: "icon-biying",
+    color:'#0a8583',
+    name: "必应",
+    url: 'https://cn.bing.com/search?q='
   },
   {
-    icon: "",
-    name: "GitHub"
+    iconName: "icon-github2",
+    color:'#24292e',
+    name: "GitHub",
+    url: 'https://github.com/search?utf8=✓&q='
   },
   {
-    icon: "",
-    name: "好搜"
+    iconName: "icon-sousuo",
+    color:'#f8b616',
+    name: "好搜",
+    url: 'https://www.so.com/s?q='
   },
   {
-    icon: "",
-    name: "搜狗"
+    iconName: "icon-sougou",
+    color:'#fe620d',
+    name: "搜狗",
+    url: 'https://www.sogou.com/web?query='
   },
   {
-    icon: "",
-    name: "B站"
+    iconName: "icon-bilibili-s",
+    color:'#f45a8d',
+    name: "B站",
+    url: 'http://search.bilibili.com/all?keyword='
   },
   {
-    icon: "",
-    name: "知乎"
+    iconName: "icon-icon-zhihu",
+    color:'#0078d7',
+    name: "知乎",
+    url: 'https://www.zhihu.com/search?type=content&q='
   }
 ])
 
@@ -105,6 +125,18 @@ const getImgUrl = (url: string) => {
   let _match = reg.exec(url)
   let imgUrl = _match ? _match[0] : ''
   return new URL(`../assets/${imgUrl}`, import.meta.url).href;
+}
+
+const onItem = (item:any)=>{
+  actIconColor.value = item.color;
+  actIconName.value = item.iconName;
+  actIconUrl.value = item.url;
+  show.value = false;
+}
+
+const onSearch = ()=>{
+  window.open(actIconUrl.value+search.value,'_blank');
+  search.value = '';
 }
 
 </script>
@@ -116,6 +148,7 @@ const getImgUrl = (url: string) => {
   overflow: auto;
 
   .lay_search {
+    position: relative;
     .lay-engine {
       position: absolute;
       top: 52px;
@@ -127,13 +160,7 @@ const getImgUrl = (url: string) => {
       box-shadow: 0px 5px 20px 0px #d8d7d7;
       transition: all 0.3s;
       z-index: 999;
-
-      .lay_title {
-        font: 400 14px '黑体';
-        color: #333;
-        margin-bottom: 12px;
-      }
-
+      box-sizing: border-box;
       .lay_content {
         .lay_li {
           background-color: #f9f9f9;
@@ -144,34 +171,54 @@ const getImgUrl = (url: string) => {
           color: #999;
           cursor: pointer;
           border-radius: 2px;
+          i{
+            margin-right: 6px;
+            font-size:18px;
+          }
         }
       }
     }
-    .lay-ips{
+
+    .lay-ips {
       position: relative;
-      .lay_lf{
+
+      .lay_lf {
         position: absolute;
         left: 0;
-        width: 60px;
+        width: 45px;
         top: 50%;
         transform: translateY(-50%);
         padding-left: 8px;
         box-sizing: border-box;
+        i{
+          font-size: 22px;
+        }
+        &::after{
+          content:"";
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          border: 6px solid transparent;
+          border-top-color: #ddd;
+        }
       }
-      .lay_rt{
+
+      .lay_rt {
         box-shadow: 0 1px 3px #ddd;
-        padding:0 12px 0 60px;
+        padding: 0 12px 0 45px;
         background-color: #fff;
         height: 45px;
         line-height: 45px;
         border-radius: 2px;
       }
-      input{
-        font:500 16px '微软雅黑';
+
+      input {
+        font: 500 16px '微软雅黑';
         border: none;
         outline: none;
         width: 100%;
         height: inherit;
+        padding-left: 8px;
       }
     }
   }
