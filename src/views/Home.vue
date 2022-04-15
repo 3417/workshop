@@ -2,7 +2,11 @@
   <component :is="isAdults ? Adult :Solar" />
   <sign :show="show" />
 </template>
-
+<script lang="ts">
+export default{
+  name:"picture"
+}
+</script>
 <script lang="ts" setup>
 import Solar from "@cp/solar.vue";
 import Adult from "@cp/adult.vue";

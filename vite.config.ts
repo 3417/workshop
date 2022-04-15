@@ -25,7 +25,7 @@ export default ({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "./src/assets/style/common.scss";`
+          // additionalData: `@import "@as/style/common.scss";`
         }
       },
       postcss:{
@@ -43,8 +43,14 @@ export default ({ mode }) => {
         ]
       }
     },
+    // optimizeDeps: {
+    //   esbuildOptions: {
+    //     target: 'es2020'
+    //   }
+    // },
     build: {
-      outDir: 'dist'
+      outDir: 'dist',
+      // target:'es2020'
     }
   })
 }

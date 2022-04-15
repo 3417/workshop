@@ -38,7 +38,7 @@ const botImg = ref("");
 const month = ref("");
 const day = ref("");
 const store = useStore();
-const covto = computed(() => store.voto);
+const covto:any = computed(() => store.voto);
 function randomHexColor(): string {
   //随机生成十六进制颜色
   return (
