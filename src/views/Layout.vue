@@ -70,8 +70,11 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import navJson from '../assets/db.json';
+import { Snackbar } from '@varlet/ui'
+import {useStore} from '@/store';
+const store = useStore();
 const search = ref("");
 const actJson = reactive({
   name: "icon-baidu",
@@ -179,7 +182,11 @@ const handleItem = (ik: Number, $event: any) => {
   } else if (ik === 2) {
     window.electron.send("minBox");
   } else if (ik === 3) {
-    alert("正在加紧完善中")
+    const snackbar1 = Snackbar.warning('接下来进入18X模式');
+    setTimeout(()=>{
+      snackbar1.clear();
+      router.push({name:'sex18'});
+    },2000)
   } else if (ik === 4) {
     router.push({ name: 'picture' });
   } else {

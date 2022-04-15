@@ -1,5 +1,7 @@
 
 import { defineStore  } from 'pinia';
+import dark from '@varlet/ui/es/themes/dark'
+import { StyleProvider } from '@varlet/ui'
 
 export const useStore = defineStore('main',{
     state:()=>{
@@ -11,6 +13,7 @@ export const useStore = defineStore('main',{
                 from_who:""
             },
             isAdult:false,
+            isLoading:false,
         }
     },
     getters:{},
@@ -20,6 +23,9 @@ export const useStore = defineStore('main',{
         },
         SET_ADULT(data:boolean){
             this.isAdult = data;
-        }
+        },
+        SET_LOADING(loading:boolean){
+            this.isLoading = loading;
+        },
     }
 })
