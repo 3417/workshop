@@ -1,6 +1,6 @@
 <template>
   <section class="zoom-move"></section>
-  <main class="lay_container">
+  <main class="lay_container" :style="{background:`url(${bgImg}) no-repeat`,backgroundSize:'100% 100%'}">
     <!-- 头部菜单 -->
     <section class="lay_scroll" v-for="(ic, ij) in navJson" :key="ij">
       <section class="lay_category" :style="{background:`linear-gradient(45deg, ${randomColor()}, ${randomColor()})`}">
@@ -34,21 +34,41 @@ export default{
 </script>
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import navJson from '../assets/lsp.json';
 const router = useRouter();
-
+const bgImg = ref('');
 const randomColor = ()=>{
   return "#" + ("00000" + ((Math.random() * 0x1000000) << 0).toString(16)).substr(-6)
 }
+const getBackImg = () => {
+  fetch("https://api.uomg.com/api/rand.img1?format=json")
+    .then((response) => response.json())
+    .then((data) => {
+      const { imgurl } = data;
+      let img = new Image();
+      img.src = imgurl;
+      img.onload = function () {
+        bgImg.value = img.src;
+      };
+    })
+    .catch(function (e) {
+      console.log("Oops, error");
+    });
+};
+
+onMounted(()=>{
+  getBackImg()
+})
 </script>
 
 <style lang="scss" scoped>
 .lay_container {
-  background: #f3f6f8;
   overflow: auto;
   height: 100%;
-
+  &:hover{
+    backdrop-filter: blur(6px);
+  }
   .lay_scroll {
     margin: 20px;
     overflow: hidden;
