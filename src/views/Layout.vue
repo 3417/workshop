@@ -1,14 +1,14 @@
 <template>
   <section class="zoom-move"></section>
   <main class="lay_container">
-    <section class="lay_search">
+    <section class="lay_search" v-click-out-side>
       <!-- 搜索框 -->
       <section class="lay-ips">
         <section class="lay_lf" @click="show = !show">
           <i :class="['iconfont', actJson.name]" :style="{ color: actJson.color }"></i>
         </section>
         <section class="lay_rt">
-          <input type="text" placeholder="请输入搜索的内容,按确定/Enter即可搜索" v-model="search" @keydown.enter="onSearch">
+          <input type="text" @focus="show=false" placeholder="请输入搜索的内容,按确定/Enter即可搜索" v-model="search" @keydown.enter="onSearch">
         </section>
       </section>
       <!-- 搜索引擎 -->
@@ -140,10 +140,9 @@ const vmenu = ref([
   { text: "美图模式", id: 4 },
   { text: "关闭应用", id: 5 },
 ]);
-
 const vContextmenu = {
-  created() { },
-  beforeMount() { },
+  created() {},
+  beforeMount() {},
   mounted(el: any, binding: any, vnode: any) {
     function showMenu(e: any) {
       const { clientX, clientY, offsetX, offsetY } = e;
@@ -172,8 +171,31 @@ const vContextmenu = {
     addEventListener("click", (e) => closeMenu(e));
     document.addEventListener("contextmenu", showMenu);
   },
+  beforeUnmount() {},
+  unmounted() {},
+};
+const vClickOutSide = {
+  created() { },
+  beforeMount() { },
+  mounted(el: any, binding: any, vnode: any) {
+    function clickHandler(e:any) {
+      if (el.contains(e.target)) {
+        return false;
+      } else {
+        // todo:直接获取组件的参数???
+        if (show.value) {
+          show.value = false;  //data定义的参数
+        }
+      }
+    }
+    el.__vueClickOutSide = clickHandler;
+    document.addEventListener("click", clickHandler);
+  },
   beforeUnmount() { },
-  unmounted() { },
+  unmounted(el:any,binding:any) {
+        document.removeEventListener("click", el.__vueClickOutSide);
+        delete el.__vueClickOutSide;
+   },
 };
 
 const handleItem = (ik: Number, $event: any) => {
