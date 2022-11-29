@@ -1,19 +1,20 @@
 <template>
   <section class="zoom-move"></section>
+  <div id="lay_bg2" class="lay_bg"></div>
   <main class="lay_container">
     <!-- 头部菜单 -->
     <section class="lay_scroll" v-for="(ic, ij) in navJson" :key="ij">
-      <section class="lay_category" :style="{background:`linear-gradient(45deg, ${randomColor()}, ${randomColor()})`}">
+      <section class="lay_category"
+        :style="{ background: `linear-gradient(45deg, ${randomColor()}, ${randomColor()})` }">
         <p class="lay__text">{{ ic.title }}</p>
       </section>
       <section>
         <var-row :gutter="20">
-          <var-col class="lay_col" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(iv, ik) in ic.child"
-            :key="ik">
+          <var-col class="lay_col" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(iv, ik) in ic.child" :key="ik">
             <a :href="iv.url" target="_blank">
               <div class="lay_item">
                 <div class="lay__hd">
-                  <div class="lay__title one_ellipsis" :style="{color:randomColor()}">{{ iv.name }}</div>
+                  <div class="lay__title one_ellipsis" :style="{ color: randomColor() }">{{ iv.name }}</div>
                 </div>
               </div>
             </a>
@@ -26,26 +27,37 @@
   <section class="lay_side">
     <var-back-top :duration="300" target=".lay_container" />
   </section>
+  <div class="btn_back" @click="backHome">
+    <var-icon name="home-outline" size="24" />
+  </div>
 </template>
 <script lang="ts">
-export default{
-  name:"sex18"
+export default {
+  name: "sex18"
 }
 </script>
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import navJson from '../assets/lsp.json';
 const router = useRouter();
-
-const randomColor = ()=>{
+const bgImg = ref("");
+const randomColor = () => {
   return "#" + ("00000" + ((Math.random() * 0x1000000) << 0).toString(16)).substr(-6)
 }
+
+const backHome = () => {
+  router.push('/')
+}
+
+onMounted(() => {
+  let bg2Container: any = document.getElementById("lay_bg2");
+  bg2Container.style = `background-image: url(https://www.dmoe.cc/random.php)`;
+})
 </script>
 
 <style lang="scss" scoped>
 .lay_container {
-  background: #f3f6f8;
   overflow: auto;
   height: 100%;
 
@@ -72,6 +84,7 @@ const randomColor = ()=>{
       margin-bottom: 15px;
       color: #fff;
       border-radius: 2px;
+
       .lay__icon {
         margin-right: 4px;
       }
@@ -89,7 +102,7 @@ const randomColor = ()=>{
         border: 1px solid #e4ecf3;
         box-shadow: 1px 2px 3px #f2f6f8;
         cursor: pointer;
-        
+
         &:hover {
           transform: translateY(1px);
           box-shadow: 0 18px 24px -16px rgb(0 36 100 / 30%);
@@ -123,10 +136,76 @@ const randomColor = ()=>{
   }
 }
 
+.lay_bg {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top:0;
+  bottom: 0;
+  z-index: -1;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  animation: shakebg 3s linear infinite;
+}
+
+@keyframes shakebg{
+  0%{
+    transform: scale(1,1);
+  }
+  50%{
+    transform: scale(1.2,1.2);
+  }
+  75%{
+    transform: scale(1.1,1.1);
+  }
+  100%{
+    transform: scale(1,1);
+  }
+}
+
 .lay_side {
   position: fixed;
   right: 20px;
   bottom: 60px;
+
+
+}
+
+.btn_back {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #3a7afe;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  right: 40px;
+  bottom: 150px;
+  animation: skeale 1.2s ease infinite;
+  cursor: pointer;
+
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes skeale {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .zoom-move {

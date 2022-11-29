@@ -37,7 +37,7 @@ defineComponent({
   name: "solar",
 });
 const getBackImg = () => {
-  fetch("https://api.uomg.com/api/rand.img1?format=json")
+  fetch(`https://picsum.photos/1920/1080?random`)
     .then((response) => response.json())
     .then((data) => {
       const { imgurl } = data;
