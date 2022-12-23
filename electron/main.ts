@@ -30,7 +30,7 @@ function createWindow() {
     })
     loading.loadURL(`file://${path.join(__dirname, NODE_DEV === 'dev' ? '../public/splash.html' : '../dist/splash.html')}`)
     loading.show();
-    mainWindow.loadURL(NODE_DEV === 'dev' ? "http://192.168.0.110:9527" : `file://${path.join(__dirname, '../dist/index.html')}`)
+    mainWindow.loadURL(NODE_DEV === 'dev' ? "http://localhost:9528" : `file://${path.join(__dirname, '../dist/index.html')}`)
     // mainWindow.webContents.openDevTools()
     mainWindow.once('ready-to-show',function(){
         setTimeout(() => {

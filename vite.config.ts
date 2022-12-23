@@ -11,7 +11,7 @@ export default ({ mode }) => {
     // base:resolve(__dirname,'./dist/'),  // 
     server: {
       host: '0.0.0.0',
-      port: 9527,
+      port: 9528,
       open: false
     },
     resolve: {
