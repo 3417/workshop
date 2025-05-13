@@ -1,47 +1,58 @@
-import { build, defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path';
+import { build, defineConfig, loadEnv } from "vite";
+import vue from "@vitejs/plugin-vue";
+import { resolve } from "path";
+import components from "unplugin-vue-components/vite";
+import autoImport from "unplugin-auto-import/vite";
+import { VarletImportResolver } from "@varlet/import-resolver";
 // https://vitejs.dev/config/
 
 export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return defineConfig({
-    plugins: [vue()],
-    base: './',  // 
-    // base:resolve(__dirname,'./dist/'),  // 
+    plugins: [
+      vue(),
+      components({
+        resolvers: [VarletImportResolver()],
+      }),
+      autoImport({
+        resolvers: [VarletImportResolver({ autoImport: true })],
+      }),
+    ],
+    base: "./", //
+    // base:resolve(__dirname,'./dist/'),  //
     server: {
-      host: '0.0.0.0',
-      port: 9528,
-      open: false
+      host: "0.0.0.0",
+      port: 9669,
+      open: false,
     },
     resolve: {
-      extensions: ['.js', '.vue', '.json', '.ts', '.tsx'],
+      extensions: [".js", ".vue", ".json", ".ts", ".tsx"],
       alias: {
-        '@': resolve(__dirname, './src'),
-        '@as': resolve(__dirname, './src/assets'),
-        '@cp': resolve(__dirname, './src/components'),
-      }
+        "@": resolve(__dirname, "./src"),
+        "@as": resolve(__dirname, "./src/assets"),
+        "@cp": resolve(__dirname, "./src/components"),
+      },
     },
     css: {
       preprocessorOptions: {
         scss: {
           // additionalData: `@import "@as/style/common.scss";`
-        }
+        },
       },
-      postcss:{
-        plugins:[
+      postcss: {
+        plugins: [
           {
-            postcssPlugin:'internal:charst-removal',
-            AtRule:{
-              charset:(atRule)=>{
-                if(atRule.name === 'charset'){
+            postcssPlugin: "internal:charst-removal",
+            AtRule: {
+              charset: (atRule) => {
+                if (atRule.name === "charset") {
                   atRule.remove();
                 }
-              }
-            }
-          }
-        ]
-      }
+              },
+            },
+          },
+        ],
+      },
     },
     // optimizeDeps: {
     //   esbuildOptions: {
@@ -49,8 +60,8 @@ export default ({ mode }) => {
     //   }
     // },
     build: {
-      outDir: 'dist',
+      outDir: "dist",
       // target:'es2020'
-    }
-  })
-}
+    },
+  });
+};

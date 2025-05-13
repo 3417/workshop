@@ -22,3 +22,9 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 - [x] 添加Material风格的Varlet框架
 - [x] 添加Pinia状态机
 
+
+### 2025年计划
+
+- [ ] 升级相关依赖 移除已失效的api
+- [ ] 重构功能页面  调整页面样式
+

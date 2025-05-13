@@ -1,5 +1,9 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray, dialog } = require('electron');
-const path = require('path');
+
+import {app,BrowserWindow,ipcMain,Menu,Tray,dialog} from 'electron';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 let mainWindow = null;
 let loading = null;
 let tray = null;
@@ -14,7 +18,7 @@ function createWindow() {
         frame: false,
         // maximizable: false,  //禁止双击放大
         webPreferences: {
-            preload: path.join(__dirname, './preload.ts'),
+            preload: path.join(__dirname, './preload.mjs'),
             nodeIntegration: true,
         }
     })
@@ -30,7 +34,7 @@ function createWindow() {
     })
     loading.loadURL(`file://${path.join(__dirname, NODE_DEV === 'dev' ? '../public/splash.html' : '../dist/splash.html')}`)
     loading.show();
-    mainWindow.loadURL(NODE_DEV === 'dev' ? "http://localhost:9528" : `file://${path.join(__dirname, '../dist/index.html')}`)
+    mainWindow.loadURL(NODE_DEV === 'dev' ? "http://localhost:9669" : `file://${path.join(__dirname, '../dist/index.html')}`)
     // mainWindow.webContents.openDevTools()
     mainWindow.once('ready-to-show',function(){
         setTimeout(() => {

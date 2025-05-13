@@ -37,7 +37,7 @@
         <var-row :gutter="20">
           <var-col class="lay_col" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(iv, ik) in ic.item_children"
             :key="ik">
-            <a :href="iv.a_href" target="_blank">
+            <a :href="iv.a_href" target="_blank" class="lay_item_href">
               <div class="lay_item">
                 <div class="lay__hd">
                   <div class="lay__logo">
@@ -136,7 +136,7 @@ const elist = ref([
 const vmenu = ref([
   { text: "全屏化", id: 1 },
   { text: "最小化", id: 2 },
-  { text: "成人导航(18X)", id: 3 },
+  // { text: "成人导航(18X)", id: 3 },
   { text: "美图模式", id: 4 },
   { text: "关闭应用", id: 5 },
 ]);
@@ -198,10 +198,11 @@ const handleItem = (ik: Number, $event: any) => {
 };
 
 const getImgUrl = (url: string) => {
-  let reg = /[^\./\s]+(?:\/[^\/\s]+)+/
+  let reg = /([^\/\\]+\.(?:png|jpg|svg))/
   let _match = reg.exec(url)
   let imgUrl = _match ? _match[0] : ''
-  return new URL(`../assets/${imgUrl}`, import.meta.url).href;
+  console.log(2333,imgUrl);
+  return new URL(`../assets/imgs/nav/${imgUrl}`, import.meta.url).href;
 }
 
 const onItem = (item: any) => {
@@ -248,6 +249,7 @@ const onSearch = () => {
           font-size: 14px;
           padding: 5px 10px 5px 10px;
           margin-bottom: 10px;
+          width: 100%;
           color: #999;
           cursor: pointer;
           border-radius: 2px;
@@ -336,7 +338,10 @@ const onSearch = () => {
 
     .lay_col {
       overflow: hidden;
-
+      .lay_item_href{
+        flex:1;
+        padding-top: 4px;
+      }
       .lay_item {
         border-radius: 6px;
         background: #fff;
@@ -348,9 +353,9 @@ const onSearch = () => {
         cursor: pointer;
 
         &:hover {
-          transform: translateY(-6px);
+          transform: translateY(-3px);
           box-shadow: 0 18px 24px -16px rgb(0 36 100 / 30%);
-          transition: transform 0.3s ease;
+          transition: transform 300ms linear;
         }
 
         .lay__hd {
