@@ -5,7 +5,23 @@ import components from "unplugin-vue-components/vite";
 import autoImport from "unplugin-auto-import/vite";
 import { VarletImportResolver } from "@varlet/import-resolver";
 // https://vitejs.dev/config/
-
+const AutoImportPlugins = autoImport({
+  resolvers: [VarletImportResolver({ autoImport: true })],
+  include: [
+    /\.[tj]sx?$/,
+    /\.vue$/,
+    /\.vue\?vue/,
+    /\.md$/,
+  ],// global imports to register
+  imports: [
+    // 插件预设支持导入的api
+    'vue',
+    'vue-router',
+    'pinia'
+    // 自定义导入的api
+  ],
+  dts:"src/auto-import.d.ts" //生成auto-import.d.ts 全局声明
+})
 export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return defineConfig({
@@ -14,9 +30,7 @@ export default ({ mode }) => {
       components({
         resolvers: [VarletImportResolver()],
       }),
-      autoImport({
-        resolvers: [VarletImportResolver({ autoImport: true })],
-      }),
+      AutoImportPlugins
     ],
     base: "./", //
     // base:resolve(__dirname,'./dist/'),  //
@@ -36,7 +50,7 @@ export default ({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          // additionalData: `@import "@as/style/common.scss";`
+          additionalData: `@use "@as/style/common.scss";`
         },
       },
       postcss: {

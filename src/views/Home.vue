@@ -11,7 +11,6 @@ export default{
 import Solar from "@cp/solar.vue";
 import Adult from "@cp/adult.vue";
 import sign from "@cp/sign.vue";
-import { computed, onMounted, ref } from "vue";
 import { useStore } from "@/store";
 const store = useStore();
 const show = ref(false);

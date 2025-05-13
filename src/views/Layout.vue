@@ -5,20 +5,39 @@
       <!-- 搜索框 -->
       <section class="lay-ips">
         <section class="lay_lf" @click="show = !show">
-          <i :class="['iconfont', actJson.name]" :style="{ color: actJson.color }"></i>
+          <i
+            :class="['iconfont', actJson.name]"
+            :style="{ color: actJson.color }"
+          ></i>
         </section>
         <section class="lay_rt">
-          <input type="text" placeholder="请输入搜索的内容,按确定/Enter即可搜索" v-model="search" @keydown.enter="onSearch">
+          <input
+            type="text"
+            placeholder="请输入搜索的内容,按确定/Enter即可搜索"
+            v-model="search"
+            @keydown.enter="onSearch"
+          />
         </section>
       </section>
       <!-- 搜索引擎 -->
       <section class="lay-engine" v-if="show">
         <div class="lay_content">
           <var-row :gutter="10">
-            <var-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(item, key) in elist" :key="key"
-              @click="onItem(item)">
+            <var-col
+              :xs="24"
+              :sm="12"
+              :md="12"
+              :lg="6"
+              :xl="6"
+              v-for="(item, key) in elist"
+              :key="key"
+              @click="onItem(item)"
+            >
               <div class="lay_li">
-                <i :class="['iconfont', item.iconName]" :style="{ color: item.color }"></i>
+                <i
+                  :class="['iconfont', item.iconName]"
+                  :style="{ color: item.color }"
+                ></i>
                 <span>{{ item.name }}</span>
               </div>
             </var-col>
@@ -26,22 +45,36 @@
         </div>
       </section>
     </section>
-    <section class="lay_scroll" v-for="(ic, ij) in navJson" :key="ij">
+    <section class="lay_scroll" v-for="(njson, ij) in navJson" :key="ij" @contextmenu="handleRightClick">
       <section class="lay_category">
         <p class="lay__icon">
-          <i :class="['iconfont', ic.category_icon]"></i>
+          <i :class="['iconfont', njson.category_icon]"></i>
         </p>
-        <p class="lay__text">{{ ic.category_CN }}</p>
+        <p class="lay__text">{{ njson.category_CN }}</p>
       </section>
       <section>
         <var-row :gutter="20">
-          <var-col class="lay_col" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(iv, ik) in ic.item_children"
-            :key="ik">
+          <var-col
+            class="lay_col"
+            :xs="24"
+            :sm="12"
+            :md="12"
+            :lg="6"
+            :xl="6"
+            v-for="(iv, ik) in njson.item_children"
+            :key="ik"
+          >
             <a :href="iv.a_href" target="_blank" class="lay_item_href">
               <div class="lay_item">
                 <div class="lay__hd">
                   <div class="lay__logo">
-                    <var-image width="40px" height="40px" fit="cover" radius="50%" :src="getImgUrl(iv.img_src)" />
+                    <var-image
+                      width="40px"
+                      height="40px"
+                      fit="cover"
+                      radius="50%"
+                      :src="getImgUrl(iv.img_src)"
+                    />
                   </div>
                   <div class="lay__title one_ellipsis">{{ iv.child_name }}</div>
                 </div>
@@ -61,162 +94,120 @@
   </section>
 
   <!-- 右键菜单 -->
-  <div class="zoom-flex" v-contextmenu="vmenu">
-    <div class="zoom" :title="iv.text" v-for="(iv, ik) in vmenu" :key="ik" @click.stop="handleItem(iv.id, $event)">
-      {{ iv.text }}
+  <transition name="context-menu-fade">
+    <div
+      class="zoom-flex"
+      v-if="showMenu"
+      :style="{ 
+        left: menuPosition.x + 'px', 
+        top: menuPosition.y + 'px',
+       }"
+    >
+      <div
+        class="zoom"
+        v-for="(option, index) in menuOptions"
+        :key="index"
+        @click="iv.handler"
+      >
+        {{ option.text }}
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
-import { onMounted, reactive, ref } from "vue";
-import navJson from '../assets/db.json';
-import { Snackbar } from '@varlet/ui'
-import {useStore} from '@/store';
+import navJson from "../assets/db.json";
+// import { Snackbar } from "@varlet/ui";
+import { useStore } from "@/store";
+import { useContextMenu } from "@/hooks/useContextMenu";
+
 const store = useStore();
 const search = ref("");
 const actJson = reactive({
   name: "icon-baidu",
   color: "#2319dc",
-  url: "https://www.baidu.com/s?wd="
-})
+  url: "https://www.baidu.com/s?wd=",
+});
 const show = ref(false);
 const router = useRouter();
 const elist = ref([
   {
     iconName: "icon-baidu",
-    color: '#2319dc',
+    color: "#2319dc",
     name: "百度",
-    url: 'https://www.baidu.com/s?wd='
+    url: "https://www.baidu.com/s?wd=",
   },
   {
     iconName: "icon-gugegoogle114",
-    color: '#4c8bf5',
+    color: "#4c8bf5",
     name: "谷歌",
-    url: 'https://www.google.com/search?q='
+    url: "https://www.google.com/search?q=",
   },
   {
     iconName: "icon-biying",
-    color: '#0a8583',
+    color: "#0a8583",
     name: "必应",
-    url: 'https://cn.bing.com/search?q='
+    url: "https://cn.bing.com/search?q=",
   },
   {
     iconName: "icon-github2",
-    color: '#24292e',
+    color: "#24292e",
     name: "GitHub",
-    url: 'https://github.com/search?utf8=✓&q='
+    url: "https://github.com/search?utf8=✓&q=",
   },
   {
     iconName: "icon-sousuo",
-    color: '#f8b616',
+    color: "#f8b616",
     name: "好搜",
-    url: 'https://www.so.com/s?q='
+    url: "https://www.so.com/s?q=",
   },
   {
     iconName: "icon-sougou",
-    color: '#fe620d',
+    color: "#fe620d",
     name: "搜狗",
-    url: 'https://www.sogou.com/web?query='
+    url: "https://www.sogou.com/web?query=",
   },
   {
     iconName: "icon-bilibili-s",
-    color: '#f45a8d',
+    color: "#f45a8d",
     name: "B站",
-    url: 'http://search.bilibili.com/all?keyword='
+    url: "http://search.bilibili.com/all?keyword=",
   },
   {
     iconName: "icon-icon-zhihu",
-    color: '#0078d7',
+    color: "#0078d7",
     name: "知乎",
-    url: 'https://www.zhihu.com/search?type=content&q='
-  }
-])
-const vmenu = ref([
-  { text: "全屏化", id: 1 },
-  { text: "最小化", id: 2 },
-  // { text: "成人导航(18X)", id: 3 },
-  { text: "美图模式", id: 4 },
-  { text: "关闭应用", id: 5 },
-]);
-
-const vContextmenu = {
-  created() { },
-  beforeMount() { },
-  mounted(el: any, binding: any, vnode: any) {
-    function showMenu(e: any) {
-      const { clientX, clientY, offsetX, offsetY } = e;
-      const dWidth = document.body.clientWidth;
-      const dHeight = document.body.clientHeight;
-      const boxWidth = el.clientWidth;
-      const boxHeight = el.clientHeight;
-      e.preventDefault();
-      el.style.opacity = 1; //右键显示
-      el.style.zIndex = 1000;
-      if (dWidth - offsetX < boxWidth) {
-        el.style.left = offsetX - boxWidth + "px";
-      } else {
-        el.style.left = clientX + "px";
-      }
-      if (dHeight - offsetY < boxHeight) {
-        el.style.top = offsetY - boxHeight + "px";
-      } else {
-        el.style.top = clientY + "px";
-      }
-    }
-    function closeMenu(e: any) {
-      el.style.opacity = 0;
-      el.style.zIndex = -1000;
-    }
-    addEventListener("click", (e) => closeMenu(e));
-    document.addEventListener("contextmenu", showMenu);
+    url: "https://www.zhihu.com/search?type=content&q=",
   },
-  beforeUnmount() { },
-  unmounted() { },
-};
-
-const handleItem = (ik: Number, $event: any) => {
-  if (ik === 1) {
-    window.electron.send("maxBox");
-  } else if (ik === 2) {
-    window.electron.send("minBox");
-  } else if (ik === 3) {
-    const snackbar1 = Snackbar.warning('接下来进入18X模式');
-    setTimeout(()=>{
-      snackbar1.clear();
-      router.push({name:'sex18'});
-    },2000)
-  } else if (ik === 4) {
-    router.push({ name: 'picture' });
-  } else {
-    window.electron.send("close");
-  }
-  const $events = $event.currentTarget.parentElement;
-  $events.style.opacity = 0;
-  $events.style.zIndex = -1000;
-};
+]);
+const menuOptions = ref([
+  { text: "全屏化", id: 1, handler: () => { window.electron.send("maxBox");} },
+  { text: "最小化", id: 2, handler: () => {window.electron.send("minBox");} },
+  { text: "神秘空间", id: 3, handler: () => {
+    console.log("神秘空间地址：")
+    router.push({ name: "sex18" });
+  } },
+  { text: "美图模式", id: 4, handler: () => {router.push({ name: "picture" });} },
+  { text: "关闭应用", id: 5, handler: () => {window.electron.send("close");} },
+]);
+const { showMenu, menuPosition, options, handleRightClick } = useContextMenu(menuOptions);
 
 const getImgUrl = (url: string) => {
-  let reg = /([^\/\\]+\.(?:png|jpg|svg))/
-  let _match = reg.exec(url)
-  let imgUrl = _match ? _match[0] : ''
-  console.log(2333,imgUrl);
+  let reg = /([^\/\\]+\.(?:png|jpg|svg))/;
+  let _match = reg.exec(url);
+  let imgUrl = _match ? _match[0] : "";
   return new URL(`../assets/imgs/nav/${imgUrl}`, import.meta.url).href;
-}
+};
 
 const onItem = (item: any) => {
-  actJson.color = item.color;
-  actJson.name = item.iconName;
-  actJson.url = item.url;
+  Object.assign(actJson,item);
   show.value = false;
-}
+};
 
 const onSearch = () => {
-  window.open(actJson.url + search.value, '_blank');
-  search.value = '';
-}
-
+  window.open(actJson.url + search.value, "_blank");
+  search.value = "";
+};
 </script>
 
 <style lang="scss" scoped>
@@ -234,7 +225,7 @@ const onSearch = () => {
       top: 52px;
       left: 0;
       width: 100%;
-      background: #FFF;
+      background: #fff;
       padding: 15px;
       border-radius: 5px;
       box-shadow: 0px 5px 20px 0px #d8d7d7;
@@ -299,7 +290,7 @@ const onSearch = () => {
       }
 
       input {
-        font: 500 16px '微软雅黑';
+        font: 500 16px "微软雅黑";
         border: none;
         outline: none;
         width: 100%;
@@ -328,7 +319,7 @@ const onSearch = () => {
     .lay_category {
       display: flex;
       align-items: center;
-      font: 500 18px '微软雅黑';
+      font: 500 18px "微软雅黑";
       margin-bottom: 15px;
 
       .lay__icon {
@@ -338,8 +329,8 @@ const onSearch = () => {
 
     .lay_col {
       overflow: hidden;
-      .lay_item_href{
-        flex:1;
+      .lay_item_href {
+        flex: 1;
         padding-top: 4px;
       }
       .lay_item {
@@ -404,6 +395,7 @@ const onSearch = () => {
   display: flex;
   flex-direction: column;
   background-color: rgb(255, 255, 255);
+  transform-origin: top left;
   position: absolute;
   z-index: 1000;
   left: 0;
@@ -413,8 +405,6 @@ const onSearch = () => {
   border-radius: 6px;
   overflow: hidden;
   transition: opacity 0.3s ease 0s;
-  opacity: 0;
-
   .zoom {
     margin: 1px 0px;
     cursor: pointer;
@@ -432,6 +422,26 @@ const onSearch = () => {
       background-color: #7d89f0;
     }
   }
+}
+
+.context-menu-fade-enter-active {
+  transition: all 300ms cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transform: scale(1);
+}
+
+.context-menu-fade-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.context-menu-fade-leave-active {
+  transition: all 200ms linear;
+  transform: scale(1);
+}
+
+.context-menu-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
 }
 
 // 媒体查询
