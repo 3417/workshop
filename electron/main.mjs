@@ -13,8 +13,8 @@ function createWindow() {
     // 创建浏览器窗口
     mainWindow = new BrowserWindow({
         show:false,
-        width: 900,
-        height: 600,
+        width: 1200,
+        height: 800,
         frame: false,
         // maximizable: false,  //禁止双击放大
         webPreferences: {

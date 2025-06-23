@@ -147,7 +147,7 @@ onMounted(() => {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  animation: shakebg 3s linear infinite;
+  animation: shakebg 6s ease-in infinite;
 }
 
 @keyframes shakebg{

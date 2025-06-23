@@ -6,7 +6,7 @@
       <section class="lay-ips">
         <section class="lay_lf" @click="show = !show">
           <i
-            :class="['iconfont', actJson.name]"
+            :class="['iconfont', actJson.iconName]"
             :style="{ color: actJson.color }"
           ></i>
         </section>
@@ -107,7 +107,7 @@
         class="zoom"
         v-for="(option, index) in menuOptions"
         :key="index"
-        @click="iv.handler"
+        @click="option.handler"
       >
         {{ option.text }}
       </div>
@@ -124,7 +124,7 @@ import { useContextMenu } from "@/hooks/useContextMenu";
 const store = useStore();
 const search = ref("");
 const actJson = reactive({
-  name: "icon-baidu",
+  iconName: "icon-baidu",
   color: "#2319dc",
   url: "https://www.baidu.com/s?wd=",
 });
@@ -181,7 +181,10 @@ const elist = ref([
   },
 ]);
 const menuOptions = ref([
-  { text: "全屏化", id: 1, handler: () => { window.electron.send("maxBox");} },
+  { text: "全屏化", id: 1, handler: () => { 
+    console.log("全屏化");
+    window.electron.send("maxBox");
+  } },
   { text: "最小化", id: 2, handler: () => {window.electron.send("minBox");} },
   { text: "神秘空间", id: 3, handler: () => {
     console.log("神秘空间地址：")

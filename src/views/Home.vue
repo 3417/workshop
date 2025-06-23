@@ -2,16 +2,15 @@
   <component :is="isAdults ? Adult :Solar" />
   <sign :show="show" />
 </template>
-<script lang="ts">
-export default{
-  name:"picture"
-}
-</script>
 <script lang="ts" setup>
 import Solar from "@cp/solar.vue";
 import Adult from "@cp/adult.vue";
 import sign from "@cp/sign.vue";
 import { useStore } from "@/store";
+import { defineOptions } from "vue";
+defineOptions({
+  name: "picture"
+});
 const store = useStore();
 const show = ref(false);
 const isAdult = ref(true);
